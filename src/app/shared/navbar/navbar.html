@@ -1,0 +1,26 @@
+<nav class="top-nav">
+    <div class="nav-left">
+        <div class="brand" routerLink="/">AutoServe</div>
+    </div>
+    <div class="nav-actions">
+        <!-- Home Link -->
+        <a routerLink="/" class="nav-link nav-home">Home</a>
+        
+        <!-- Links when NOT logged in -->
+        <ng-container *ngIf="!isAuthenticated(); else loggedInParams">
+            <a routerLink="/register" class="nav-link nav-auth">Register</a>
+            <a routerLink="/login" class="nav-link nav-auth">Login</a>
+        </ng-container>
+
+        <!-- Links when LOGGED IN -->
+        <ng-template #loggedInParams>
+            <button class="btn-dashboard" (click)="toDashboard()">Dashboard</button>
+            <button class="btn-logout" (click)="logout()">Logout</button>
+            <button class="btn-profile" title="Profile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </ng-template>
+    </div>
+</nav>

@@ -1,0 +1,231 @@
+/* Enterprise Navbar Design */
+
+:host {
+    display: block;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 40px;
+    background: rgba(255, 255, 255, 0.95);
+    /* Semi-transparent */
+    backdrop-filter: blur(12px);
+    /* Frosted glass effect */
+    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+
+    /* Sticky Logic */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    /* Richer shadow */
+    transition: all 0.3s ease;
+}
+
+/* Left Section - Logo + Home */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+/* Logo / Brand */
+.brand {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2563eb;
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: -0.025em;
+    transition: color 0.2s;
+}
+
+.brand:hover {
+    color: #1d4ed8;
+}
+
+/* Home Navigation Link */
+.nav-home {
+    color: #374151;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    background: transparent;
+}
+
+.nav-home:hover {
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+/* Right Side Actions */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+/* General Link Styles */
+a {
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Nav Auth Links (Register/Login) - No Button Look */
+.nav-link {
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-auth {
+    color: #4b5563;
+    padding: 6px 0;
+    border-bottom: 2px solid transparent;
+}
+
+.nav-auth:hover {
+    color: #2563eb;
+    border-bottom-color: #2563eb;
+}
+
+/* Dashboard Button */
+.btn-dashboard {
+    padding: 8px 16px;
+    border: 1px solid #2563eb;
+    border-radius: 6px;
+    background: transparent;
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-dashboard:hover {
+    background: #eff6ff;
+    border-color: #1d4ed8;
+    color: #1d4ed8;
+}
+
+/* Profile Button */
+.btn-profile {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #d1d5db;
+    border-radius: 50%;
+    background: #f9fafb;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.btn-profile svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 2;
+}
+
+.btn-profile:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+}
+
+/* Logout Button */
+.btn-logout {
+    padding: 8px 16px;
+    border: 1px solid #dc2626;
+    border-radius: 6px;
+    background: transparent;
+    color: #dc2626;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-logout:hover {
+    background: #fef2f2;
+    border-color: #b91c1c;
+    color: #b91c1c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .top-nav {
+        padding: 12px 20px;
+    }
+
+    .nav-left {
+        gap: 20px;
+    }
+
+    .brand {
+        font-size: 16px;
+    }
+
+    .nav-home {
+        font-size: 13px;
+    }
+
+    .nav-actions {
+        gap: 16px;
+    }
+
+    .btn-profile {
+        width: 36px;
+        height: 36px;
+    }
+
+    .btn-profile svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .top-nav {
+        padding: 10px 16px;
+    }
+
+    .nav-left {
+        gap: 16px;
+    }
+
+    .nav-actions {
+        gap: 12px;
+    }
+
+    .btn-dashboard,
+    .btn-logout {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .btn-profile {
+        width: 32px;
+        height: 32px;
+    }
+
+    .btn-profile svg {
+        width: 16px;
+        height: 16px;
+    }
+}
