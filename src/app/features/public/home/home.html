@@ -1,57 +1,157 @@
 <div class="home-wrapper">
-  <!-- Navbar moved to shared/global -->
-
-  <section class="hero">
-    <h1>Vehicle Service Management System</h1>
-    <p>
-      A centralized platform to book services, assign technicians,
-      track progress, manage inventory, and handle billing — all in one place.
-    </p>
-    <div class="hero-buttons">
-      <button class="btn-primary" (click)="goRegister()">Get Started</button>
-
-      <!-- <button class="btn-outline" (click)="goLogin()">Sign In</button> -->
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">Vehicle Service Management System</h1>
+      <p class="hero-subtitle">
+        Manage your vehicle services seamlessly — from booking to completion.
+      </p>
+      <div class="hero-buttons">
+        <button class="btn-primary-large" (click)="goRegister()">Book a Service</button>
+        <button class="btn-outline-large" (click)="goLogin()">Track Request</button>
+      </div>
     </div>
   </section>
 
-  <section class="features">
-    <div class="feature">
-      <h3>Easy Service Booking</h3>
-      <p>
-        Book your vehicle service in just a few clicks by selecting your vehicle,
-        describing the issue, and choosing priority.
-      </p>
+  <!-- Why Choose Us -->
+  <section class="features-section">
+    <div class="section-header">
+      <h2>Why Choose Us</h2>
+      <p>Experience the next generation of vehicle care</p>
     </div>
 
-    <div class="feature">
-      <h3>Real-Time Status Updates</h3>
-      <p>
-        Track every stage of your service request – Assigned, In Progress,
-        Completed and Closed – all in real time.
-      </p>
-    </div>
+    <div class="features-grid">
+      <!-- Feature 1 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="feature-icon">
+            <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <h3>Smart Service Booking</h3>
+        <p>Book services in a few clicks. Select your vehicle, describe the issue, and you're set.</p>
+      </div>
 
-    <div class="feature">
-      <h3>Instant Notifications</h3>
-      <p>
-        Receive automatic email notifications when your service is booked,
-        assigned, completed, and when the invoice is generated.
-      </p>
-    </div>
+      <!-- Feature 2 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="feature-icon">
+            <path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <h3>Real-Time Tracking</h3>
+        <p>Track your service progress live—from "Assigned" to "Completed" status updates.</p>
+      </div>
 
-    <div class="feature">
-      <h3>Secure Digital Billing</h3>
-      <p>
-        View detailed invoices online and complete payments securely without
-        visiting the service center.
-      </p>
-    </div>
+      <!-- Feature 3 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="feature-icon">
+            <path
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <h3>Instant Notifications</h3>
+        <p>Get automated email updates for every action taken on your vehicle.</p>
+      </div>
 
+      <!-- Feature 4 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="feature-icon">
+            <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <h3>Secure Digital Billing</h3>
+        <p>View invoices and track payment status securely online.</p>
+      </div>
+    </div>
   </section>
 
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <div class="section-header">
+      <h2>How It Works</h2>
+      <p>Simple, transparent 5-step process</p>
+    </div>
 
+    <div class="timeline-steps">
+      <div class="step-item">
+        <div class="step-circle">1</div>
+        <p>Register</p>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item">
+        <div class="step-circle">2</div>
+        <p>Book Service</p>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item">
+        <div class="step-circle">3</div>
+        <p>Assign Tech</p>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item">
+        <div class="step-circle">4</div>
+        <p>Service Done</p>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item">
+        <div class="step-circle">5</div>
+        <p>Invoice</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <h2>Ready to simplify vehicle servicing?</h2>
+    <p>Join thousands of satisfied customers today.</p>
+    <button class="btn-cta" (click)="goRegister()">Get Started</button>
+  </section>
+
+  <!-- Footer -->
   <footer class="footer">
-    <p>© {{ year }} AutoServe — Vehicle Service Management System</p>
-  </footer>
+    <div class="footer-content">
+      <div class="footer-section bg-brand">
+        <h3>AutoServe</h3>
+        <p>Premium vehicle care for the modern era. We combine cutting-edge technology with expert service.</p>
+      </div>
 
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a routerLink="/">Home</a></li>
+          <li><a routerLink="/login">Login</a></li>
+          <li><a routerLink="/register">Register</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Contact Us</h4>
+        <ul>
+          <li>support@autoserve.com</li>
+          <li>+1 (555) 123-4567</li>
+          <li>123 Service Lane, Auto City</li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Legal</h4>
+        <ul>
+          <li><a>Privacy Policy</a></li>
+          <li><a>Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© {{ year }} Vehicle Service Management System. All rights reserved.</p>
+    </div>
+  </footer>
 </div>
