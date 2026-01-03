@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpBase } from '../http-base';
 import { Observable } from 'rxjs';
+import { HttpBase } from '../http-base';
 
 export interface UserResponse {
   id: string;
@@ -15,15 +15,23 @@ export class UserService {
   constructor(private http: HttpBase) {}
 
   getAllUsers(): Observable<UserResponse[]> {
-    return this.http.get('/api/users');
+    return this.http.get<UserResponse[]>('/api/users');
+  }
+
+  createUser(payload: { username: string; email: string; password: string; role: string }): Observable<any> {
+    return this.http.post('/api/users/create', payload);
+  }
+
+  createTechnician(payload: { userId: string; specialization: string; available: boolean }): Observable<any> {
+    return this.http.post('/api/technicians', payload);
   }
 
   getUserById(id: string): Observable<UserResponse> {
-    return this.http.get(`/api/users/${id}`);
+    return this.http.get<UserResponse>(`/api/users/${id}`);
   }
 
   getUsersByRole(role: string): Observable<UserResponse[]> {
-    return this.http.get(`/api/users/role/${role}`);
+    return this.http.get<UserResponse[]>(`/api/users/role/${role}`);
   }
 
   disableUser(id: string): Observable<any> {
