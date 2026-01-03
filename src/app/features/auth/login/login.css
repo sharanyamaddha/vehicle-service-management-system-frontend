@@ -1,12 +1,27 @@
-
 :host {
-    display: block;
-    min-height: 100vh;
-    background-color: #f0f2f5;
-    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     display: flex;
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     align-items: center;
     justify-content: center;
+
+    /* Hero Background Logic from Home */
+    background-image: url('https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=1920&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+/* Dark Overlay for Readability */
+:host::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(30, 58, 138, 0.45) 0%, rgba(17, 24, 39, 0.65) 100%);
+    z-index: 0;
 }
 
 .login-container {
@@ -14,17 +29,22 @@
     padding: 20px;
     display: flex;
     justify-content: center;
+    position: relative;
+    z-index: 1;
+    /* Above overlay */
 }
 
+/* Glassmorphism Card */
 .login-card {
-    background: white;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
     width: 100%;
     max-width: 400px;
     padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-top: 4px solid #0056b3;
-
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    /* Removed top border for cleaner look */
 }
 
 .login-header {
@@ -33,14 +53,14 @@
 }
 
 .app-title {
-    font-size: 24px;
-    color: #333;
-    font-weight: 600;
+    font-size: 26px;
+    color: #111827;
+    font-weight: 700;
     margin: 0 0 5px;
 }
 
 .login-subtitle {
-    color: #666;
+    color: #4b5563;
     font-size: 14px;
     margin: 0;
 }
@@ -54,7 +74,7 @@
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
-    color: #444;
+    color: #374151;
     font-size: 14px;
 }
 
@@ -62,69 +82,54 @@
     width: 100%;
     padding: 10px 12px;
     font-size: 14px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: #f9fafb;
+    transition: all 0.2s;
     box-sizing: border-box;
-    
 }
 
 .form-control:focus {
-    border-color: #0056b3;
+    border-color: #2563eb;
+    background: #ffffff;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .form-control.error {
-    border-color: #dc3545;
+    border-color: #dc2626;
+    background: #fef2f2;
 }
 
 .error-feedback {
-    color: #dc3545;
+    color: #dc2626;
     font-size: 12px;
     margin-top: 5px;
 }
 
 /* Alert */
 .alert {
-    padding: 10px 15px;
-    border-radius: 4px;
-    margin-bottom: 20px;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 24px;
     font-size: 14px;
 }
 
 .alert-error {
-    background-color: #fde8e8;
-    color: #9b1c1c;
-    border: 1px solid #f8b4b4;
-}
-
-/* Actions */
-.form-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.remember-me {
-    font-size: 14px;
-    color: #666;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    cursor: pointer;
+    background-color: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
 }
 
 /* Button */
 .btn-login {
     width: 100%;
     padding: 12px;
-    background-color: #0056b3;
-    /* Primary Blue */
+    background-color: #2563eb;
+    /* Corporate Blue */
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
@@ -132,11 +137,11 @@
 }
 
 .btn-login:hover {
-    background-color: #004494;
+    background-color: #1d4ed8;
 }
 
 .btn-login:disabled {
-    background-color: #a0c4e8;
+    background-color: #93c5fd;
     cursor: not-allowed;
 }
 
@@ -144,22 +149,22 @@
 .login-footer {
     text-align: center;
     margin-top: 25px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #e5e7eb;
     padding-top: 20px;
 }
 
 .login-footer p {
-    color: #666;
+    color: #6b7280;
     font-size: 14px;
     margin: 0;
 }
 
 .login-footer a {
-    color: #0056b3;
+    color: #2563eb;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .login-footer a:hover {
-    text-decoration: underline;
+    color: #1d4ed8;
 }
