@@ -1,1 +1,84 @@
-<p>register works!</p>
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <h2 class="app-title">Vehicle Service Management</h2>
+      <p class="register-subtitle">Create your customer account</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+
+      
+      <div *ngIf="errorMessage" class="alert alert-error">
+        {{ errorMessage }}
+      </div>
+      <div *ngIf="successMessage" class="alert alert-success">
+        {{ successMessage }}
+      </div>
+
+      <!-- Username -->
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" formControlName="username" class="form-control"
+          [class.error]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
+          placeholder="Choose a username">
+        <div class="error-feedback"
+          *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+          Username is required (min 3 chars).
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" formControlName="email" class="form-control"
+          [class.error]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+          placeholder="Enter your email">
+        <div class="error-feedback" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+          Valid email is required.
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" formControlName="password" class="form-control"
+          [class.error]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+          placeholder="Create a password">
+
+        <!-- Strength Bar (Simple) -->
+        <div class="strength-meter" *ngIf="registerForm.get('password')?.value">
+          <div class="strength-bar" [ngClass]="getPasswordStrength()"></div>
+          <span class="strength-text">{{ getPasswordStrength() | titlecase }}</span>
+        </div>
+
+        <div class="error-feedback"
+          *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          Password must be at least 6 characters.
+        </div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control"
+          [class.error]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched"
+          placeholder="Confirm your password">
+        <div class="error-feedback"
+          *ngIf="registerForm.get('confirmPassword')?.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched">
+          Passwords do not match.
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn-register" [disabled]="registerForm.invalid || isLoading">
+        <span *ngIf="!isLoading">Create Account</span>
+        <span *ngIf="isLoading">Creating...</span>
+      </button>
+
+      <!-- Footer Links -->
+      <div class="register-footer">
+        <p>Already have an account? <a routerLink="/login">Sign in</a></p>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,210 @@
+:host {
+    display: block;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.register-container {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    overflow-y: auto;
+}
+
+.register-card {
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #0056b3;
+    /* Professional Blue Accent */
+    margin: 20px 0;
+}
+
+.register-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.app-title {
+    font-size: 24px;
+    color: #333;
+    font-weight: 600;
+    margin: 0 0 5px;
+}
+
+.register-subtitle {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #444;
+    font-size: 14px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    border-color: #0056b3;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+}
+
+.form-control.error {
+    border-color: #dc3545;
+}
+
+.error-feedback {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Alert */
+.alert {
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.alert-error {
+    background-color: #fde8e8;
+    color: #9b1c1c;
+    border: 1px solid #f8b4b4;
+}
+
+.alert-success {
+    background-color: #def7ec;
+    color: #03543f;
+    border: 1px solid #84e1bc;
+}
+
+/* Strength Meter */
+.strength-meter {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.strength-bar {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: #eee;
+    position: relative;
+    overflow: hidden;
+}
+
+.strength-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-bar.weak::after {
+    width: 33%;
+    background-color: #dc3545;
+}
+
+.strength-bar.fair::after {
+    width: 66%;
+    background-color: #ffc107;
+}
+
+.strength-bar.strong::after {
+    width: 100%;
+    background-color: #28a745;
+}
+
+/* Default/Weak fallback */
+.strength-bar:not(.fair):not(.strong)::after {
+    width: 33%;
+    background-color: #dc3545;
+}
+
+
+.strength-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    min-width: 50px;
+}
+
+/* Button */
+.btn-register {
+    width: 100%;
+    padding: 12px;
+    background-color: #0056b3;
+    /* Primary Blue */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-register:hover {
+    background-color: #004494;
+}
+
+.btn-register:disabled {
+    background-color: #a0c4e8;
+    cursor: not-allowed;
+}
+
+/* Footer */
+.register-footer {
+    text-align: center;
+    margin-top: 25px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.register-footer p {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+.register-footer a {
+    color: #0056b3;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.register-footer a:hover {
+    text-decoration: underline;
+}
