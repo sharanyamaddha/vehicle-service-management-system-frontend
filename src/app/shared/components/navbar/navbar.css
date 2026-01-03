@@ -1,0 +1,149 @@
+/* Enterprise Navbar Design */
+
+:host {
+    display: block;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 40px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+
+    /* Sticky Logic */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    /* Very subtle shadow */
+    transition: box-shadow 0.3s ease;
+}
+
+/* Logo / Brand */
+.brand {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    /* Dark Gray/Black for enterprise feel */
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: -0.025em;
+    transition: color 0.2s;
+}
+
+.brand:hover {
+    color: #000000;
+}
+
+/* Right Side Actions */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    /* Increased spacing for cleaner look */
+}
+
+/* General Link Styles */
+a {
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+/* Nav Link (Home) */
+.nav-link {
+    color: #4b5563;
+    /* Gray-600 */
+}
+
+.nav-link:hover {
+    color: #111827;
+    /* Gray-900 */
+}
+
+.dashboard-link {
+    color: #4f46e5;
+}
+
+/* Outlined Button (Login) */
+.btn-outline {
+    padding: 8px 16px;
+    border: 1px solid #d1d5db;
+    /* Gray-300 */
+    border-radius: 6px;
+    color: #374151;
+    /* Gray-700 */
+    background: transparent;
+}
+
+.btn-outline:hover {
+    border-color: #9ca3af;
+    /* Gray-400 */
+    color: #111827;
+    background-color: #f9fafb;
+    /* Gray-50 */
+}
+
+/* Primary Button (Register) */
+.btn-primary {
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: white;
+    background-color: #2563eb;
+    /* Blue-600 - Classic Enterprise Blue */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+    /* Blue-700 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* User Welcome Text */
+.welcome-text {
+    font-size: 14px;
+    color: #6b7280;
+    border-right: 1px solid #e5e7eb;
+    padding-right: 24px;
+    /* Separate user info from actions */
+    margin-right: 0;
+    /* Gap handled by parent gap */
+}
+
+.logout-btn {
+    border-color: #fee2e2;
+    color: #991b1b;
+}
+
+.logout-btn:hover {
+    background-color: #fef2f2;
+    border-color: #fecaca;
+    color: #7f1d1d;
+}
+
+/* Responsive adjustments if needed */
+@media (max-width: 640px) {
+    .top-nav {
+        padding: 12px 20px;
+    }
+
+    .brand {
+        font-size: 16px;
+    }
+
+    .nav-actions {
+        gap: 16px;
+    }
+
+    .welcome-text {
+        display: none;
+        /* Hide welcome text on small screens */
+    }
+}
