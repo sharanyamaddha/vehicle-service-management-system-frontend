@@ -5,9 +5,13 @@
     <div class="sidebar-header">
       <div class="sidebar-brand">
         <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M12 14l9-5-9-5-9 5 9 5z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 14l9-5-9-5-9 5 9 5z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path
+            d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path
+            d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
         <span class="brand-text">Admin Panel</span>
       </div>
@@ -20,9 +24,23 @@
         <li class="nav-item" [class.active]="activeMenu === 'users'">
           <a class="nav-link" (click)="setActiveMenu('users')">
             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path
+                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
             <span class="nav-text">Add Users</span>
+          </a>
+        </li>
+
+        <!-- Pending Invites -->
+        <li class="nav-item" [class.active]="activeMenu === 'invites'">
+          <a class="nav-link" (click)="setActiveMenu('invites')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span class="nav-text">Pending Invites</span>
           </a>
         </li>
 
@@ -30,7 +48,9 @@
         <li class="nav-item" [class.active]="activeMenu === 'bays'">
           <a class="nav-link" (click)="setActiveMenu('bays')">
             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
             <span class="nav-text">Add Bays</span>
           </a>
@@ -40,7 +60,8 @@
         <li class="nav-item" [class.active]="activeMenu === 'inventory'">
           <a class="nav-link" (click)="setActiveMenu('inventory')">
             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" />
             </svg>
             <span class="nav-text">Add Inventory</span>
           </a>
@@ -50,24 +71,16 @@
         <li class="nav-item" [class.active]="activeMenu === 'reports'">
           <a class="nav-link" (click)="setActiveMenu('reports')">
             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path
+                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
             <span class="nav-text">Reports</span>
           </a>
         </li>
       </ul>
     </nav>
-
-    <!-- Sidebar Footer -->
-    <div class="sidebar-footer">
-      <div class="admin-info">
-        <div class="admin-avatar">A</div>
-        <div class="admin-details">
-          <p class="admin-name">Administrator</p>
-          <p class="admin-role">System Admin</p>
-        </div>
-      </div>
-    </div>
+    <!-- Sidebar Footer REMOVED per user request -->
   </aside>
 
   <!-- Main Content Area -->
@@ -78,6 +91,7 @@
         <h1>
           <ng-container [ngSwitch]="activeMenu">
             <span *ngSwitchCase="'users'">User Management</span>
+            <span *ngSwitchCase="'invites'">Pending Invitations</span>
             <span *ngSwitchCase="'bays'">Bay Management</span>
             <span *ngSwitchCase="'inventory'">Inventory Management</span>
             <span *ngSwitchCase="'reports'">Reports & Analytics</span>
@@ -87,6 +101,7 @@
         <p class="page-subtitle">
           <ng-container [ngSwitch]="activeMenu">
             <span *ngSwitchCase="'users'">View and manage all registered users</span>
+            <span *ngSwitchCase="'invites'">Manage users who haven't activated their account yet</span>
             <span *ngSwitchCase="'bays'">Manage service bays and allocations</span>
             <span *ngSwitchCase="'inventory'">Track and manage inventory items</span>
             <span *ngSwitchCase="'reports'">View system reports and analytics</span>
@@ -94,19 +109,40 @@
           </ng-container>
         </p>
       </div>
-      
+
       <div class="top-bar-actions">
         <button class="btn-icon" title="Notifications">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </button>
+
+        <!-- Profile Dropdown -->
+        <div class="profile-dropdown-container">
+          <div class="admin-avatar-small" (click)="showProfileMenu = !showProfileMenu">A</div>
+          <div class="profile-menu" *ngIf="showProfileMenu">
+            <div class="profile-header">
+              <p class="name">Administrator</p>
+              <p class="role">System Admin</p>
+            </div>
+            <button class="btn-logout-dropdown" (click)="logout()">
+              <svg viewBox="0 0 24 24" fill="none" class="logout-icon" stroke="currentColor">
+                <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              Logout
+            </button>
+          </div>
+        </div>
       </div>
     </header>
 
     <!-- Content Area -->
     <div class="content-area">
       <div class="content-wrapper">
+
         <!-- Users Section -->
         <div *ngIf="activeMenu === 'users'" class="section-content">
           <div class="content-card">
@@ -124,7 +160,7 @@
                 </div>
                 <button class="btn-primary" (click)="showAddUser = !showAddUser">
                   <svg class="btn-icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M12 4v16m8-8H4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 4v16m8-8H4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                   {{ showAddUser ? 'Close' : 'Add New User' }}
                 </button>
@@ -138,17 +174,14 @@
                   <div class="form-field">
                     <label>Username</label>
                     <input type="text" formControlName="username" placeholder="Enter username" />
-                    <small *ngIf="addUserForm.get('username')?.touched && addUserForm.get('username')?.invalid">Required (min 3 chars)</small>
                   </div>
                   <div class="form-field">
                     <label>Email</label>
                     <input type="email" formControlName="email" placeholder="user@example.com" />
-                    <small *ngIf="addUserForm.get('email')?.touched && addUserForm.get('email')?.invalid">Enter valid email</small>
                   </div>
                   <div class="form-field">
                     <label>Password</label>
                     <input type="password" formControlName="password" placeholder="Min 6 characters" />
-                    <small *ngIf="addUserForm.get('password')?.touched && addUserForm.get('password')?.invalid">Min 6 characters</small>
                   </div>
                   <div class="form-field">
                     <label>Role</label>
@@ -163,7 +196,6 @@
                       <option value="">Select specialization</option>
                       <option *ngFor="let sp of specializations" [value]="sp">{{ sp }}</option>
                     </select>
-                    <small *ngIf="addUserForm.get('specialization')?.touched && addUserForm.get('specialization')?.invalid">Required</small>
                   </div>
                   <div class="form-field toggle-field" *ngIf="addUserForm.get('role')?.value === 'TECHNICIAN'">
                     <label>Available</label>
@@ -181,32 +213,18 @@
                 </div>
               </form>
             </div>
+
+            <!-- Users Table -->
             <div class="card-body">
-              <!-- Loading State -->
               <div *ngIf="isLoading" class="loading-state">
                 <div class="spinner"></div>
                 <p>Loading users...</p>
               </div>
-
-              <!-- Error State -->
-              <div *ngIf="errorMessage && !isLoading" class="error-state">
-                <svg class="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <p>{{ errorMessage }}</p>
-                <button class="btn-retry" (click)="loadUsers()">Retry</button>
-              </div>
-
-              <!-- Empty State -->
-              <div *ngIf="!isLoading && !errorMessage && users.length === 0" class="empty-state">
-                <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+              <div *ngIf="!isLoading && users.length === 0" class="empty-state">
                 <p>No users found</p>
               </div>
 
-              <!-- Users Table -->
-              <div *ngIf="!isLoading && !errorMessage && users.length > 0" class="table-container">
+              <div *ngIf="!isLoading && users.length > 0" class="table-container">
                 <table class="users-table">
                   <thead>
                     <tr>
@@ -219,35 +237,57 @@
                   </thead>
                   <tbody>
                     <tr *ngFor="let user of filteredUsers">
-                      <td>
-                        <span class="user-name">{{ user.username }}</span>
-                      </td>
+                      <td><span class="user-name">{{ user.username }}</span></td>
                       <td>{{ user.email }}</td>
+                      <td><span class="role-badge" [ngClass]="getRoleBadgeClass(user.role)">{{ user.role }}</span></td>
+                      <td><span class="status-badge" [ngClass]="user.active ? 'status-active' : 'status-inactive'">{{
+                          user.active ? 'Active' : 'Inactive' }}</span></td>
                       <td>
-                        <span class="role-badge" [ngClass]="getRoleBadgeClass(user.role)">
-                          {{ user.role }}
-                        </span>
-                      </td>
-                      <td>
-                        <span class="status-badge" [ngClass]="user.active ? 'status-active' : 'status-inactive'">
-                          {{ user.active ? 'Active' : 'Inactive' }}
-                        </span>
-                      </td>
-                      <td>
-                        <button 
-                          class="btn-action" 
-                          [ngClass]="user.active ? 'btn-deactivate' : 'btn-activate'"
-                          (click)="openConfirm(user)"
-                          [title]="user.active ? 'Deactivate user' : 'Activate user'">
-                          <svg *ngIf="user.active" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                          </svg>
-                          <svg *ngIf="!user.active" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                          </svg>
+                        <button class="btn-action" [ngClass]="user.active ? 'btn-deactivate' : 'btn-activate'"
+                          (click)="openConfirm(user)">
                           {{ user.active ? 'Deactivate' : 'Activate' }}
                         </button>
                       </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pending Invites Section -->
+        <div *ngIf="activeMenu === 'invites'" class="section-content">
+          <div class="content-card">
+            <div class="card-header">
+              <h3>Invited Users (Pending Activation)</h3>
+            </div>
+            <div class="card-body">
+              <div *ngIf="isLoading" class="loading-state">
+                <div class="spinner"></div>
+                <p>Loading invites...</p>
+              </div>
+              <div *ngIf="!isLoading && invitedUsers.length === 0" class="empty-state">
+                <p>No pending invites found</p>
+              </div>
+
+              <div *ngIf="!isLoading && invitedUsers.length > 0" class="table-container">
+                <table class="users-table">
+                  <thead>
+                    <tr>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let user of invitedUsers">
+                      <td>{{ user.email }}</td>
+                      <td><span class="role-badge" [ngClass]="getRoleBadgeClass(user.role)">{{ user.role }}</span></td>
+                      <td><span class="status-badge" style="background-color: #fff3cd; color: #856404;">Pending
+                          Activation</span></td>
+                      <td><button class="btn-resend" (click)="resendInvite(user)">Resend Invite</button></td>
                     </tr>
                   </tbody>
                 </table>
@@ -260,57 +300,170 @@
         <div *ngIf="activeMenu === 'bays'" class="section-content">
           <div class="content-card">
             <div class="card-header">
-              <h3>Service Bays</h3>
-              <button class="btn-primary">
+              <h3>Service Bays Management</h3>
+              <button class="btn-primary" (click)="showAddBay = !showAddBay">
                 <svg class="btn-icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M12 4v16m8-8H4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 4v16m8-8H4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
                 Add New Bay
               </button>
             </div>
+
+            <!-- Add Bay Form -->
+            <div class="add-user-card" *ngIf="showAddBay">
+              <form [formGroup]="addBayForm" (ngSubmit)="submitAddBay()">
+                <div class="form-grid" style="grid-template-columns: 1fr;">
+                  <div class="form-field">
+                    <label>Bay Number</label>
+                    <input type="number" formControlName="bayNumber" placeholder="Enter bay number">
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button type="button" class="btn-secondary" (click)="showAddBay = false">Cancel</button>
+                  <button type="submit" class="btn-primary" [disabled]="isSubmitting || addBayForm.invalid">Save
+                    Bay</button>
+                </div>
+              </form>
+            </div>
+
             <div class="card-body">
-              <p class="placeholder-text">Bay management will appear here</p>
+              <div *ngIf="isLoading" class="loading-state">
+                <div class="spinner"></div>
+                <p>Loading bays...</p>
+              </div>
+              <div *ngIf="!isLoading && bays.length === 0" class="empty-state">
+                <p>No bays found. Add one to get started.</p>
+              </div>
+
+              <div *ngIf="!isLoading && bays.length > 0" class="table-container">
+                <table class="users-table">
+                  <thead>
+                    <tr>
+                      <th>Bay Number</th>
+                      <th>Status</th>
+                      <th>Availability</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let bay of bays">
+                      <td><b>Bay {{ bay.bayNumber }}</b></td>
+                      <td>
+                        <span class="status-badge" [ngClass]="bay.active ? 'status-active' : 'status-inactive'">
+                          {{ bay.active ? 'Enabled' : 'Disabled' }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="role-badge" [style.background-color]="bay.available ? '#d4edda' : '#f8d7da'"
+                          [style.color]="bay.available ? '#155724' : '#721c24'">
+                          {{ bay.available ? 'Free' : 'Occupied' }}
+                        </span>
+                      </td>
+                      <td>
+                        <button class="btn-action" [ngClass]="bay.active ? 'btn-deactivate' : 'btn-activate'"
+                          (click)="toggleBayStatus(bay)">
+                          {{ bay.active ? 'Disable' : 'Enable' }}
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Inventory Section -->
+        <!-- Inventory Requests Section -->
         <div *ngIf="activeMenu === 'inventory'" class="section-content">
           <div class="content-card">
             <div class="card-header">
-              <h3>Inventory Items</h3>
-              <button class="btn-primary">
-                <svg class="btn-icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M12 4v16m8-8H4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Add New Item
-              </button>
+              <h3>Low Stock / Restock Requests</h3>
             </div>
+
+            <!-- Restock Modal (Inline) -->
+            <div class="add-user-card" *ngIf="showRestock">
+              <h4 style="margin-bottom: 1rem;">Restock {{ selectedPart?.name }}</h4>
+              <form [formGroup]="restockForm" (ngSubmit)="submitRestock()">
+                <div class="form-grid" style="grid-template-columns: 1fr;">
+                  <div class="form-field">
+                    <label>Quantity to Add</label>
+                    <input type="number" formControlName="quantity" placeholder="Enter quantity">
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button type="button" class="btn-secondary"
+                    (click)="showRestock = false; selectedPart = null;">Cancel</button>
+                  <button type="submit" class="btn-primary" [disabled]="isSubmitting || restockForm.invalid">Confirm
+                    Restock</button>
+                </div>
+              </form>
+            </div>
+
             <div class="card-body">
-              <p class="placeholder-text">Inventory list will appear here</p>
+              <div *ngIf="isLoading" class="loading-state">
+                <div class="spinner"></div>
+                <p>Checking inventory...</p>
+              </div>
+              <div *ngIf="!isLoading && lowStockItems.length === 0" class="empty-state">
+                <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                <p>All items are well stocked.</p>
+              </div>
+
+              <div *ngIf="!isLoading && lowStockItems.length > 0" class="table-container">
+                <table class="users-table">
+                  <thead>
+                    <tr>
+                      <th>Item Name</th>
+                      <th>Current Stock</th>
+                      <th>Price</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of lowStockItems">
+                      <td>{{ item.name }}</td>
+                      <td style="color: #dc3545; font-weight: bold;">{{ item.stockQuantity }} (Low)</td>
+                      <td>${{ item.price }}</td>
+                      <td>
+                        <button class="btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;"
+                          (click)="openRestock(item)">
+                          Approve / Restock
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Reports Section -->
         <div *ngIf="activeMenu === 'reports'" class="section-content">
-          <div class="content-card">
-            <div class="card-header">
-              <h3>System Reports</h3>
-              <button class="btn-secondary">
-                <svg class="btn-icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Export Report
-              </button>
+          <div class="dashboard-stats"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div class="stat-card"
+              style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #eee;">
+              <h3 style="margin: 0; color: #64748b; font-size: 0.9rem;">Total Users</h3>
+              <p style="margin: 0.5rem 0 0; font-size: 2rem; font-weight: 600; color: #1e293b;">{{ totalUsers }}</p>
             </div>
-            <div class="card-body">
-              <p class="placeholder-text">Reports and analytics will appear here</p>
+            <div class="stat-card"
+              style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #eee;">
+              <h3 style="margin: 0; color: #64748b; font-size: 0.9rem;">Active Bays</h3>
+              <p style="margin: 0.5rem 0 0; font-size: 2rem; font-weight: 600; color: #10b981;">{{ totalBays }}</p>
+            </div>
+            <div class="stat-card"
+              style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #eee;">
+              <h3 style="margin: 0; color: #64748b; font-size: 0.9rem;">Low Stock Items</h3>
+              <p style="margin: 0.5rem 0 0; font-size: 2rem; font-weight: 600; color: #ef4444;">{{ totalLowStock }}</p>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </main>
-  <!-- Confirmation Dialog Removed - Using Angular Material -->
 </div>
