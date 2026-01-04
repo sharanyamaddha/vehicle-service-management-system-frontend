@@ -11,8 +11,13 @@ import { RouterModule, Router } from '@angular/router';
 })
 export class DashboardLayout {
   showProfileMenu: boolean = false;
+  role: string = '';
+  username: string = '';
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+    this.role = sessionStorage.getItem('role') || '';
+    this.username = sessionStorage.getItem('username') || 'User';
+  }
 
   logout(): void {
     sessionStorage.clear();

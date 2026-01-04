@@ -33,4 +33,8 @@ export class HttpBase {
   patch<T>(url: string, body?: any): Observable<T> {
     return this.http.patch<T>(environment.apiUrl + url, body || {}, this.headers());
   }
+
+  delete<T>(url: string): Observable<T> {
+    return this.http.delete<T>(environment.apiUrl + url, this.headers());
+  }
 }

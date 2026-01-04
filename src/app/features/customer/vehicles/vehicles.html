@@ -1,1 +1,115 @@
-<p>vehicles works!</p>
+<div class="content-card">
+    <div class="card-header">
+        <h3>My Vehicles</h3>
+        <button class="btn-primary" (click)="showAddVehicle = !showAddVehicle">
+            <svg class="btn-icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 4v16m8-8H4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Add New Vehicle
+        </button>
+    </div>
+
+    <!-- Add Vehicle Form -->
+    <div class="add-user-card" *ngIf="showAddVehicle">
+        <form [formGroup]="vehicleForm" (ngSubmit)="submitVehicle()">
+            <div class="form-grid">
+                <div class="form-field">
+                    <label>Make</label>
+                    <input type="text" formControlName="make" placeholder="e.g. Toyota">
+                </div>
+                <div class="form-field">
+                    <label>Model</label>
+                    <input type="text" formControlName="model" placeholder="e.g. Camry">
+                </div>
+                <div class="form-field">
+                    <label>Year</label>
+                    <input type="number" formControlName="year" placeholder="YYYY">
+                </div>
+                <div class="form-field">
+                    <label>Registration Number (e.g. KA01AB1234)</label>
+                    <input type="text" formControlName="registrationNumber" placeholder="KA01AB1234">
+                    <small
+                        *ngIf="vehicleForm.get('registrationNumber')?.invalid && vehicleForm.get('registrationNumber')?.touched"
+                        class="text-red-500 text-xs">
+                        Format: KA01AB1234
+                    </small>
+                </div>
+                <div class="form-field">
+                    <label>Color</label>
+                    <input type="text" formControlName="color" placeholder="e.g. Red">
+                </div>
+                <div class="form-field">
+                    <label>Type</label>
+                    <select formControlName="type">
+                        <option value="CAR">Car</option>
+                        <option value="BIKE">Bike</option>
+                        <option value="TRUCK">Truck</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" (click)="showAddVehicle = false">Cancel</button>
+                <button type="submit" class="btn-primary" [disabled]="isSubmitting || vehicleForm.invalid">
+                    {{ isSubmitting ? 'Saving...' : 'Save Vehicle' }}
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card-body">
+        <div *ngIf="isLoading" class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading your vehicles...</p>
+        </div>
+
+        <div *ngIf="!isLoading && vehicles.length === 0" class="empty-state">
+            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path
+                    d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M7 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p>No vehicles added yet.</p>
+        </div>
+
+        <div *ngIf="!isLoading && vehicles.length > 0" class="vehicles-grid">
+            <div class="vehicle-card" *ngFor="let vehicle of vehicles">
+                <div class="vehicle-icon">
+                    <svg *ngIf="vehicle.type === 'CAR'" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path
+                            d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M7 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <svg *ngIf="vehicle.type === 'BIKE'" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="5.5" cy="17.5" r="3.5" stroke-width="2" />
+                        <circle cx="18.5" cy="17.5" r="3.5" stroke-width="2" />
+                        <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3.2-6m11 5.5l-2.6-4.6" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <svg *ngIf="vehicle.type === 'TRUCK'" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M1 3h15v13H1z" stroke-width="2" />
+                        <path d="M16 8h4l3 3v5h-7V8z" stroke-width="2" />
+                        <circle cx="5.5" cy="18.5" r="2.5" stroke-width="2" />
+                        <circle cx="18.5" cy="18.5" r="2.5" stroke-width="2" />
+                    </svg>
+                </div>
+                <div class="vehicle-info">
+                    <h4>{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</h4>
+                    <p class="license-plate">{{ vehicle.registrationNumber }}</p>
+                    <p class="vehicle-meta">{{ vehicle.color }} • {{ vehicle.type }}</p>
+                </div>
+                <div class="vehicle-actions">
+                    <button class="btn-delete" (click)="deleteVehicle(vehicle)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

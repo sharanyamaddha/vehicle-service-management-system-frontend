@@ -38,7 +38,18 @@ export const routes: Routes = [
   },
 
   // Other Dashboards (Placeholder, can be updated to use DashboardLayout later)
-  { path: 'customer', children: [{ path: 'dashboard', component: CustomerDashboard }] },
+  // Customer Dashboard
+  {
+    path: 'customer',
+    component: DashboardLayout,
+    children: [
+      { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
+      { path: 'dashboard', redirectTo: 'vehicles', pathMatch: 'full' }, // Redirect legacy
+      { path: 'vehicles', loadComponent: () => import('./features/customer/vehicles/vehicles').then(m => m.Vehicles) },
+      // { path: 'requests', loadComponent: ... },
+      // { path: 'invoices', loadComponent: ... },
+    ]
+  },
   { path: 'manager', children: [{ path: 'dashboard', component: ManagerDashboard }] },
   { path: 'technician', children: [{ path: 'dashboard', component: TechnicianDashboard }] },
 ];
