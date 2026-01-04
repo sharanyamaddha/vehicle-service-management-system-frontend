@@ -49,19 +49,16 @@
 
 /* Home Navigation Link */
 .nav-home {
-    color: #374151;
+    color: #4b5563;
     font-size: 14px;
     font-weight: 500;
     text-decoration: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-    background: transparent;
+    transition: color 0.2s ease;
 }
 
 .nav-home:hover {
     color: #2563eb;
-    background: #eff6ff;
+    /* Removed background hover for consistency */
 }
 
 /* Right Side Actions */
@@ -97,27 +94,31 @@ a {
 
 .nav-auth:hover {
     color: #2563eb;
-    border-bottom-color: #2563eb;
+    /* border-bottom-color: #2563eb; */
 }
 
-/* Dashboard Button */
-.btn-dashboard {
-    padding: 8px 16px;
-    border: 1px solid #2563eb;
-    border-radius: 6px;
-    background: transparent;
-    color: #2563eb;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
+/* Dashboard Link */
+.nav-dashboard {
+    color: #4f46e5;
+    font-weight: 500;
 }
 
-.btn-dashboard:hover {
-    background: #eff6ff;
-    border-color: #1d4ed8;
-    color: #1d4ed8;
+.nav-dashboard:hover {
+    color: #4338ca;
+    text-decoration: underline;
 }
+
+/* Logout Link */
+.nav-logout {
+    color: #dc2626;
+    font-weight: 500;
+}
+
+.nav-logout:hover {
+    color: #b91c1c;
+    text-decoration: underline;
+}
+
 
 /* Profile Button */
 .btn-profile {
@@ -148,26 +149,6 @@ a {
     color: #ffffff;
 }
 
-/* Logout Button */
-.btn-logout {
-    padding: 8px 16px;
-    border: 1px solid #dc2626;
-    border-radius: 6px;
-    background: transparent;
-    color: #dc2626;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.btn-logout:hover {
-    background: #fef2f2;
-    border-color: #b91c1c;
-    color: #b91c1c;
-}
-
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .top-nav {
         padding: 12px 20px;

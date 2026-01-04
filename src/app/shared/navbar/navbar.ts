@@ -25,8 +25,16 @@ export class Navbar {
     }
 
     logout(): void {
-        localStorage.clear();
+        sessionStorage.clear();
         this.router.navigate(['/home']);
+    }
+
+    goHomeOrDashboard(): void {
+        if (this.isAuthenticated()) {
+            this.toDashboard();
+        } else {
+            this.router.navigate(['/']);
+        }
     }
 
     toDashboard(): void {
