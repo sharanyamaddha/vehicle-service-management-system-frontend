@@ -27,20 +27,20 @@ export class Auth {
   }
 
   saveSession(res: any, role?: string) {
-    localStorage.setItem('token', res.token || res.accessToken);
-    localStorage.setItem('userId', res.userId);
+    sessionStorage.setItem('token', res.token || res.accessToken);
+    sessionStorage.setItem('userId', res.userId);
     if (role) {
-      localStorage.setItem('role', role);
+      sessionStorage.setItem('role', role);
     } else if (res.role) {
-      localStorage.setItem('role', res.role);
+      sessionStorage.setItem('role', res.role);
     }
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    return !!sessionStorage.getItem('token');
   }
 
   getRole(): string | null {
-    return localStorage.getItem('role');
+    return sessionStorage.getItem('role');
   }
 }
