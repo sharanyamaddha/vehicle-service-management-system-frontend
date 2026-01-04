@@ -1,0 +1,37 @@
+<div class="content-card">
+    <div class="card-header">
+        <h3>Invited Users (Pending Activation)</h3>
+    </div>
+    <div class="card-body">
+        <div *ngIf="isLoading" class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading invites...</p>
+        </div>
+        <div *ngIf="!isLoading && invitedUsers.length === 0" class="empty-state">
+            <p>No pending invites found</p>
+        </div>
+
+        <div *ngIf="!isLoading && invitedUsers.length > 0" class="table-container">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of invitedUsers">
+                        <td>{{ user.email }}</td>
+                        <td><span class="role-badge" [ngClass]="getRoleBadgeClass(user.role)">{{ user.role }}</span>
+                        </td>
+                        <td><span class="status-badge" style="background-color: #fff3cd; color: #856404;">Pending
+                                Activation</span></td>
+                        <td><button class="btn-resend" (click)="resendInvite(user)">Resend Invite</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
