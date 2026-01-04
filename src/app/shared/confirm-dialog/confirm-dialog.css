@@ -1,0 +1,5 @@
+/* Bootstrap handles the modal styling. 
+   Add custom overrides here if needed. */
+:host {
+  display: block;
+}

@@ -1,0 +1,15 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ data.title }}</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body">
+  <p>{{ data.message }}</p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="onCancel()">
+    {{ data.cancelLabel || 'Cancel' }}
+  </button>
+  <button type="button" class="btn" [ngClass]="data.isDangerous ? 'btn-danger' : 'btn-primary'" (click)="onConfirm()">
+    {{ data.confirmLabel || 'Confirm' }}
+  </button>
+</div>
