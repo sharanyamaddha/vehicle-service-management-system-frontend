@@ -1,0 +1,64 @@
+<div class="content-card">
+    <div class="card-header">
+        <h3>Low Stock / Restock Requests</h3>
+    </div>
+
+    <!-- Restock Modal (Inline) -->
+    <div class="add-user-card" *ngIf="showRestock">
+        <h4 style="margin-bottom: 1rem;">Restock {{ selectedPart?.name }}</h4>
+        <form [formGroup]="restockForm" (ngSubmit)="submitRestock()">
+            <div class="form-grid" style="grid-template-columns: 1fr;">
+                <div class="form-field">
+                    <label>Quantity to Add</label>
+                    <input type="number" formControlName="quantity" placeholder="Enter quantity">
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-secondary"
+                    (click)="showRestock = false; selectedPart = null;">Cancel</button>
+                <button type="submit" class="btn-primary" [disabled]="isSubmitting || restockForm.invalid">Confirm
+                    Restock</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card-body">
+        <div *ngIf="isLoading" class="loading-state">
+            <div class="spinner"></div>
+            <p>Checking inventory...</p>
+        </div>
+        <div *ngIf="!isLoading && lowStockItems.length === 0" class="empty-state">
+            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+            <p>All items are well stocked.</p>
+        </div>
+
+        <div *ngIf="!isLoading && lowStockItems.length > 0" class="table-container">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Current Stock</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of lowStockItems">
+                        <td>{{ item.name }}</td>
+                        <td style="color: #dc3545; font-weight: bold;">{{ item.stockQuantity }} (Low)</td>
+                        <td>${{ item.price }}</td>
+                        <td>
+                            <button class="btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;"
+                                (click)="openRestock(item)">
+                                Approve / Restock
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

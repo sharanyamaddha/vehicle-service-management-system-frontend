@@ -8,11 +8,12 @@ export interface UserResponse {
   email: string;
   role: string;
   active: boolean;
+  passwordSet?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  constructor(private http: HttpBase) {}
+  constructor(private http: HttpBase) { }
 
   getAllUsers(): Observable<UserResponse[]> {
     return this.http.get<UserResponse[]>('/api/users');
@@ -46,7 +47,14 @@ export class UserService {
     return this.http.get('/api/users/disabled');
   }
 
+  getInvitedUsers(): Observable<UserResponse[]> {
+    return this.http.get<UserResponse[]>('/api/users/invited');
+  }
+
   resetPassword(id: string): Observable<any> {
     return this.http.patch(`/api/users/${id}/reset-password`, {});
+  }
+  resendInvite(userId: string): Observable<any> {
+    return this.http.post(`/api/users/${userId}/resend-invite`, {});
   }
 }

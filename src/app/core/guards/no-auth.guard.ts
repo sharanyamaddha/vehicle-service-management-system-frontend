@@ -13,7 +13,7 @@ export const NoAuthGuard: CanActivateFn = (route, state) => {
         // getting them to dashboard is safer.
 
         const role = auth.getRole();
-        if (role === 'ADMIN') router.navigate(['/admin/dashboard']);
+        if (role === 'ADMIN') router.navigate(['/admin']);
         else if (role === 'TECHNICIAN') router.navigate(['/technician/dashboard']);
         else if (role === 'MANAGER') router.navigate(['/manager/dashboard']);
         else if (role === 'CUSTOMER') router.navigate(['/customer/dashboard']);

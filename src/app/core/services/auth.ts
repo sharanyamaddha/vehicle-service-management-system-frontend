@@ -26,6 +26,10 @@ export class Auth {
     return this.http.post('/api/auth/register', data);
   }
 
+  activateAccount(token: string, password: string) {
+    return this.http.post('/api/auth/activate', { token, password });
+  }
+
   saveSession(res: any, role?: string) {
     sessionStorage.setItem('token', res.token || res.accessToken);
     sessionStorage.setItem('userId', res.userId);
