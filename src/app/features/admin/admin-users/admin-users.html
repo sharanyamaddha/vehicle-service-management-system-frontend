@@ -1,0 +1,110 @@
+<div class="content-card">
+    <div class="card-header">
+        <h3>All Registered Users</h3>
+        <div class="header-actions">
+            <div class="filter-group">
+                <label for="roleFilter">Filter by Role</label>
+                <select id="roleFilter" [formControl]="roleFilterControl">
+                    <option value="ALL">All</option>
+                    <option value="MANAGER">Manager</option>
+                    <option value="TECHNICIAN">Technician</option>
+                    <option value="CUSTOMER">Customer</option>
+                </select>
+            </div>
+            <button class="btn-primary" (click)="showAddUser = !showAddUser">
+                <svg class="btn-icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 4v16m8-8H4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                {{ showAddUser ? 'Close' : 'Add New User' }}
+            </button>
+        </div>
+    </div>
+
+    <!-- Add User Form -->
+    <div class="add-user-card" *ngIf="showAddUser">
+        <form [formGroup]="addUserForm" (ngSubmit)="submitAddUser()">
+            <div class="form-grid">
+                <div class="form-field">
+                    <label>Username</label>
+                    <input type="text" formControlName="username" placeholder="Enter username" />
+                </div>
+                <div class="form-field">
+                    <label>Email</label>
+                    <input type="email" formControlName="email" placeholder="user@example.com" />
+                </div>
+                <div class="form-field">
+                    <label>Password</label>
+                    <input type="password" formControlName="password" placeholder="Min 6 characters" />
+                </div>
+                <div class="form-field">
+                    <label>Role</label>
+                    <select formControlName="role">
+                        <option value="MANAGER">Manager</option>
+                        <option value="TECHNICIAN">Technician</option>
+                    </select>
+                </div>
+                <div class="form-field" *ngIf="addUserForm.get('role')?.value === 'TECHNICIAN'">
+                    <label>Specialization</label>
+                    <select formControlName="specialization">
+                        <option value="">Select specialization</option>
+                        <option *ngFor="let sp of specializations" [value]="sp">{{ sp }}</option>
+                    </select>
+                </div>
+                <div class="form-field toggle-field" *ngIf="addUserForm.get('role')?.value === 'TECHNICIAN'">
+                    <label>Available</label>
+                    <label class="switch">
+                        <input type="checkbox" formControlName="available" />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" (click)="showAddUser = false">Cancel</button>
+                <button type="submit" class="btn-primary" [disabled]="isSubmitting || addUserForm.invalid">
+                    {{ isSubmitting ? 'Saving...' : 'Save User' }}
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Users Table -->
+    <div class="card-body">
+        <div *ngIf="isLoading" class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading users...</p>
+        </div>
+        <div *ngIf="!isLoading && users.length === 0" class="empty-state">
+            <p>No users found</p>
+        </div>
+
+        <div *ngIf="!isLoading && users.length > 0" class="table-container">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of filteredUsers">
+                        <td><span class="user-name">{{ user.username }}</span></td>
+                        <td>{{ user.email }}</td>
+                        <td><span class="role-badge" [ngClass]="getRoleBadgeClass(user.role)">{{ user.role }}</span>
+                        </td>
+                        <td><span class="status-badge" [ngClass]="user.active ? 'status-active' : 'status-inactive'">{{
+                                user.active ? 'Active' : 'Inactive' }}</span></td>
+                        <td>
+                            <button class="btn-action" [ngClass]="user.active ? 'btn-deactivate' : 'btn-activate'"
+                                (click)="openConfirm(user)">
+                                {{ user.active ? 'Deactivate' : 'Activate' }}
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
