@@ -13,7 +13,7 @@ export interface UserResponse {
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  constructor(private http: HttpBase) { }
+  constructor(private readonly http: HttpBase) { }
 
   getAllUsers(): Observable<UserResponse[]> {
     return this.http.get<UserResponse[]>('/api/users');

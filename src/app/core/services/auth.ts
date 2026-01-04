@@ -16,7 +16,7 @@ export interface RegisterRequest {
 @Injectable({ providedIn: 'root' })
 export class Auth {
 
-  constructor(private http: HttpBase) { }
+  constructor(private readonly http: HttpBase) { }
 
   login(data: LoginRequest) {
     return this.http.post('/api/auth/login', data);
