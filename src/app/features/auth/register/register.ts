@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Auth, RegisterRequest } from '../../../core/services/auth';
@@ -18,9 +18,9 @@ export class Register implements OnInit {
   successMessage = '';
 
   constructor(
-    private fb: FormBuilder,
-    private authService: Auth,
-    private router: Router
+    private readonly fb: FormBuilder,
+    private readonly authService: Auth,
+    private readonly router: Router
   ) { }
 
   ngOnInit(): void {
@@ -32,7 +32,7 @@ export class Register implements OnInit {
   }
 
   initializeForm(): void {
-    this.registerForm = this.fb.group(
+    this.registerForm = this.fb.nonNullable.group(
       {
         username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
         email: ['', [Validators.required, Validators.email]],
@@ -43,7 +43,8 @@ export class Register implements OnInit {
     );
   }
 
-  passwordMatchValidator(group: FormGroup): { [key: string]: any } | null {
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const group = control as FormGroup;
     const password = group.get('password');
     const confirmPassword = group.get('confirmPassword');
 
@@ -100,8 +101,8 @@ export class Register implements OnInit {
 
     const hasUpperCase = /[A-Z]/.test(password);
     const hasLowerCase = /[a-z]/.test(password);
-    const hasNumber = /[0-9]/.test(password);
-    const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
 
     const strength = [hasUpperCase, hasLowerCase, hasNumber, hasSpecialChar].filter(Boolean).length;
 

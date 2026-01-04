@@ -3,7 +3,6 @@ import { Home } from './features/public/home/home';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
 import { NoAuthGuard } from './core/guards/no-auth.guard';
-import { CustomerDashboard } from './features/customer/customer-dashboard/customer-dashboard';
 import { ManagerDashboard } from './features/manager/manager-dashboard/manager-dashboard';
 import { TechnicianDashboard } from './features/technician/technician-dashboard/technician-dashboard';
 import { PublicLayout } from './shared/layouts/public-layout/public-layout';
@@ -46,8 +45,9 @@ export const routes: Routes = [
       { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
       { path: 'dashboard', redirectTo: 'vehicles', pathMatch: 'full' }, // Redirect legacy
       { path: 'vehicles', loadComponent: () => import('./features/customer/vehicles/vehicles').then(m => m.Vehicles) },
-      // { path: 'requests', loadComponent: ... },
-      // { path: 'invoices', loadComponent: ... },
+      { path: 'requests', loadComponent: () => import('./features/customer/requests/requests').then(m => m.Requests) },
+      { path: 'invoices', loadComponent: () => import('./features/customer/invoices/invoices').then(m => m.Invoices) },
+      { path: 'book-service/:vehicleId', loadComponent: () => import('./features/customer/book-service/book-service').then(m => m.BookService) }
     ]
   },
   { path: 'manager', children: [{ path: 'dashboard', component: ManagerDashboard }] },

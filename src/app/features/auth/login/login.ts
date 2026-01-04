@@ -18,10 +18,10 @@ export class Login implements OnInit {
   errorMessage = '';
 
   constructor(
-    private fb: FormBuilder,
-    private authService: Auth,
-    private router: Router,
-    private http: HttpBase
+    private readonly fb: FormBuilder,
+    private readonly authService: Auth,
+    private readonly router: Router,
+    private readonly http: HttpBase
   ) { }
 
   ngOnInit(): void {

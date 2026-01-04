@@ -26,6 +26,13 @@ export class HttpBase {
     return this.http.post<T>(environment.apiUrl + url, body, this.headers());
   }
 
+  postText(url: string, body: any): Observable<string> {
+    return this.http.post(environment.apiUrl + url, body, {
+      ...this.headers(),
+      responseType: 'text' as const
+    });
+  }
+
   put<T>(url: string, body: any): Observable<T> {
     return this.http.put<T>(environment.apiUrl + url, body, this.headers());
   }

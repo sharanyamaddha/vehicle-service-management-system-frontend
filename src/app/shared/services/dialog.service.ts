@@ -6,7 +6,7 @@ import { ConfirmDialog, ConfirmDialogData } from '../confirm-dialog/confirm-dial
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
-  constructor(private modalService: NgbModal) { }
+  constructor(private readonly modalService: NgbModal) { }
 
   confirm(data: ConfirmDialogData): Observable<boolean> {
     const modalRef = this.modalService.open(ConfirmDialog, {
