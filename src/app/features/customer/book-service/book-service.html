@@ -1,0 +1,106 @@
+<div class="content-card">
+  <div class="card-header">
+    <h3>Book Service</h3>
+  </div>
+
+  <div class="card-body">
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading vehicle details...</p>
+    </div>
+
+    <div *ngIf="!isLoading && vehicle" class="book-service-form">
+      <!-- Vehicle Summary -->
+      <div class="vehicle-summary">
+        <div class="summary-header">
+          <h4>Vehicle Information</h4>
+        </div>
+        <div class="vehicle-details">
+          <div class="detail-item">
+            <span class="label">Vehicle:</span>
+            <span class="value">{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Registration:</span>
+            <span class="value">{{ vehicle.registrationNumber }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Color:</span>
+            <span class="value">{{ vehicle.color }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Type:</span>
+            <span class="value">{{ vehicle.type }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking Form -->
+      <form [formGroup]="bookForm" (ngSubmit)="submitBooking()" class="booking-form">
+        <div class="form-section">
+          <h5>Service Details</h5>
+
+          <div class="form-field">
+            <label for="issue">Issue/Service Required *</label>
+            <textarea 
+              id="issue"
+              formControlName="issue" 
+              placeholder="Describe the issue or service you need (e.g., Engine trouble, Brake inspection, Regular maintenance, etc.)"
+              rows="4"
+              [class.is-invalid]="bookForm.get('issue')?.invalid && bookForm.get('issue')?.touched">
+            </textarea>
+            <small 
+              *ngIf="bookForm.get('issue')?.invalid && bookForm.get('issue')?.touched"
+              class="error-text">
+              Issue must be at least 10 characters long
+            </small>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="priority">Priority Level *</label>
+              <select id="priority" formControlName="priority">
+                <option value="LOW">Low - Can wait</option>
+                <option value="NORMAL">Normal - Within a week</option>
+                <option value="HIGH">High - Urgent (1-2 days)</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="estimatedBudget">Estimated Budget (₹)</label>
+              <input 
+                id="estimatedBudget"
+                type="number" 
+                formControlName="estimatedBudget" 
+                placeholder="e.g. 5000"
+                min="0">
+              <small class="hint">Optional - your budget estimate</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="goBack()">
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            class="btn-primary" 
+            [disabled]="isSubmitting || bookForm.invalid">
+            {{ isSubmitting ? 'Booking...' : 'Confirm Booking' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="!isLoading && !vehicle" class="error-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="12" cy="12" r="10" stroke-width="2" />
+        <line x1="12" y1="8" x2="12" y2="12" stroke-width="2" />
+        <line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2" />
+      </svg>
+      <p>Vehicle not found</p>
+      <button class="btn-primary" (click)="goBack()">Go Back to Vehicles</button>
+    </div>
+  </div>
+</div>

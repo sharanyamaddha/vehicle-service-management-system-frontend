@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { VehicleService, Vehicle } from '../../../core/services/vehicle';
 import { Auth } from '../../../core/services/auth';
@@ -8,7 +9,7 @@ import { DialogService } from '../../../shared/services/dialog.service';
 @Component({
   selector: 'app-vehicles',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './vehicles.html',
   styleUrl: './vehicles.css'
 })
@@ -21,11 +22,12 @@ export class Vehicles implements OnInit {
   customerId: string = '';
 
   constructor(
-    private vehicleService: VehicleService,
-    private authService: Auth,
-    private fb: FormBuilder,
-    private dialogService: DialogService,
-    private cdr: ChangeDetectorRef
+    private readonly vehicleService: VehicleService,
+    private readonly authService: Auth,
+    private readonly fb: FormBuilder,
+    private readonly dialogService: DialogService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly router: Router
   ) { }
 
   ngOnInit(): void {
@@ -126,5 +128,10 @@ export class Vehicles implements OnInit {
         });
       }
     });
+  }
+
+  bookService(vehicle: Vehicle): void {
+    // Navigate to book service page
+    this.router.navigate(['/customer/book-service', vehicle.id]);
   }
 }

@@ -1,1 +1,81 @@
-<p>invoices works!</p>
+<div class="content-card">
+  <div class="card-header">
+    <h3>My Invoices</h3>
+  </div>
+
+  <div class="card-body">
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading your invoices...</p>
+    </div>
+
+    <div *ngIf="!isLoading && invoices.length === 0" class="empty-state">
+      <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <polyline points="13 2 13 9 20 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <p>No invoices yet.</p>
+    </div>
+
+    <div *ngIf="!isLoading && invoices.length > 0" class="invoices-container">
+      <!-- Summary Cards -->
+      <div class="summary-cards">
+        <div class="summary-card">
+          <span class="summary-label">Total Invoices</span>
+          <span class="summary-value">{{ invoices.length }}</span>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Total Amount</span>
+          <span class="summary-value">₹{{ getTotalAmount() | number:'1.0-2' }}</span>
+        </div>
+        <div class="summary-card alert">
+          <span class="summary-label">Outstanding</span>
+          <span class="summary-value">₹{{ getTotalUnpaid() | number:'1.0-2' }}</span>
+        </div>
+      </div>
+
+      <!-- Invoices Table -->
+      <div class="table-wrapper">
+        <table class="invoices-table">
+          <thead>
+            <tr>
+              <th>Invoice ID</th>
+              <th>Service Request</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let invoice of invoices">
+              <td>
+                <span class="invoice-id">{{ invoice.id | slice:0:8 }}...</span>
+              </td>
+              <td>{{ invoice.serviceRequestId | slice:0:8 }}...</td>
+              <td class="amount">₹{{ invoice.total | number:'1.0-2' }}</td>
+              <td>
+                <span *ngIf="isPaid(invoice.status)" class="status-badge paid">
+                  ✓ Paid
+                </span>
+                <span *ngIf="isUnpaid(invoice.status)" class="status-badge unpaid">
+                  Pending
+                </span>
+              </td>
+              <td>{{ invoice.createdAt | date:'MMM dd, yyyy' }}</td>
+              <td>
+                <button 
+                  *ngIf="isUnpaid(invoice.status)"
+                  class="btn-view"
+                  (click)="viewInvoice(invoice.id)">
+                  View Invoice
+                </button>
+                <span *ngIf="isPaid(invoice.status)" class="action-text">Paid</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
