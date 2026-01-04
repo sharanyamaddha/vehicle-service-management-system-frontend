@@ -1,0 +1,73 @@
+<div class="content-card">
+    <div class="card-header">
+        <h3>Service Bays Management</h3>
+        <button class="btn-primary" (click)="showAddBay = !showAddBay">
+            <svg class="btn-icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 4v16m8-8H4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Add New Bay
+        </button>
+    </div>
+
+    <!-- Add Bay Form -->
+    <div class="add-user-card" *ngIf="showAddBay">
+        <form [formGroup]="addBayForm" (ngSubmit)="submitAddBay()">
+            <div class="form-grid" style="grid-template-columns: 1fr;">
+                <div class="form-field">
+                    <label>Bay Number</label>
+                    <input type="number" formControlName="bayNumber" placeholder="Enter bay number">
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" (click)="showAddBay = false">Cancel</button>
+                <button type="submit" class="btn-primary" [disabled]="isSubmitting || addBayForm.invalid">Save
+                    Bay</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card-body">
+        <div *ngIf="isLoading" class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading bays...</p>
+        </div>
+        <div *ngIf="!isLoading && bays.length === 0" class="empty-state">
+            <p>No bays found. Add one to get started.</p>
+        </div>
+
+        <div *ngIf="!isLoading && bays.length > 0" class="table-container">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Bay Number</th>
+                        <th>Status</th>
+                        <th>Availability</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let bay of bays">
+                        <td><b>Bay {{ bay.bayNumber }}</b></td>
+                        <td>
+                            <span class="status-badge" [ngClass]="bay.active ? 'status-active' : 'status-inactive'">
+                                {{ bay.active ? 'Enabled' : 'Disabled' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="role-badge" [style.background-color]="bay.available ? '#d4edda' : '#f8d7da'"
+                                [style.color]="bay.available ? '#155724' : '#721c24'">
+                                {{ bay.available ? 'Free' : 'Occupied' }}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn-action" [ngClass]="bay.active ? 'btn-deactivate' : 'btn-activate'"
+                                (click)="toggleBayStatus(bay)">
+                                {{ bay.active ? 'Disable' : 'Enable' }}
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
