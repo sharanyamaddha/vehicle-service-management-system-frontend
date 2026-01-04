@@ -11,7 +11,9 @@
 
     <div *ngIf="!isLoading && requests.length === 0" class="empty-state">
       <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <path
+          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
       <p>No service requests yet.</p>
     </div>
@@ -28,48 +30,28 @@
           </span>
         </div>
 
-        <div class="request-details">
-          <div class="detail-row">
-            <span class="label">Vehicle:</span>
-            <span class="value">{{ request.vehicleId }}</span>
+        <div class="request-details two-col-grid">
+          <div class="detail-item">
+            <span class="label">Vehicle</span>
+            <span class="value">{{ getVehicleName(request.vehicleId) }}</span>
           </div>
-          <div class="detail-row">
-            <span class="label">Service Type:</span>
+          <div class="detail-item">
+            <span class="label">Service Type</span>
             <span class="value">{{ request.issue }}</span>
           </div>
-          <div class="detail-row">
-            <span class="label">Priority:</span>
+          <div class="detail-item">
+            <span class="label">Priority</span>
             <span class="value">{{ request.priority }}</span>
           </div>
-          <div class="detail-row">
-            <span class="label">Date Booked:</span>
-            <span class="value">{{ request.createdAt | date:'short' }}</span>
+          <div class="detail-item">
+            <span class="label">Date Booked</span>
+            <span class="value">{{ request.createdAt | date:'mediumDate' }}</span>
           </div>
         </div>
 
         <div class="request-actions">
-          <!-- View Details button -->
-          <button 
-            *ngIf="isViewDetailsEnabled(request.status)"
-            class="btn-primary"
-            [routerLink]="['/customer/requests', request.id]">
+          <button class="btn-primary" (click)="viewDetails(request)">
             View Details
-          </button>
-
-          <!-- Waiting for Invoice message -->
-          <button 
-            *ngIf="isWaitingForInvoice(request.status)"
-            class="btn-disabled"
-            disabled>
-            Waiting for Invoice
-          </button>
-
-          <!-- View Invoice button -->
-          <button 
-            *ngIf="isViewInvoiceEnabled(request.status)"
-            class="btn-primary"
-            [routerLink]="['/customer/invoices']">
-            View Invoice
           </button>
         </div>
       </div>

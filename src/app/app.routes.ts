@@ -46,6 +46,7 @@ export const routes: Routes = [
       { path: 'dashboard', redirectTo: 'vehicles', pathMatch: 'full' }, // Redirect legacy
       { path: 'vehicles', loadComponent: () => import('./features/customer/vehicles/vehicles').then(m => m.Vehicles) },
       { path: 'requests', loadComponent: () => import('./features/customer/requests/requests').then(m => m.Requests) },
+      { path: 'requests/:id', loadComponent: () => import('./features/customer/service-detail/service-detail').then(m => m.ServiceDetailComponent) },
       { path: 'invoices', loadComponent: () => import('./features/customer/invoices/invoices').then(m => m.Invoices) },
       { path: 'book-service/:vehicleId', loadComponent: () => import('./features/customer/book-service/book-service').then(m => m.BookService) }
     ]

@@ -43,8 +43,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-state p {
@@ -115,64 +120,78 @@
   color: #6b7280;
 }
 
+/* Status Badges */
 .status-badge {
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 4px;
 }
 
-.status-booked {
-  background: #dbeafe;
-  color: #1e40af;
+.status-requested {
+  color: #6b7280;
+  /* Grey */
+  background: #f3f4f6;
 }
 
 .status-assigned {
-  background: #fcd34d;
-  color: #78350f;
+  color: #2563eb;
+  /* Blue */
+  background: #eff6ff;
 }
 
 .status-in-progress {
-  background: #fecaca;
-  color: #7f1d1d;
+  color: #f97316;
+  /* Orange */
+  background: #fff7ed;
 }
 
 .status-completed {
-  background: #bbf7d0;
-  color: #065f46;
+  color: #eab308;
+  /* Yellow */
+  background: #fefce8;
 }
 
 .status-closed {
-  background: #d1d5db;
-  color: #374151;
+  color: #059669;
+  /* Green */
+  background: #ecfdf5;
 }
 
+/* Details Grid */
 .request-details {
+  border-top: 2px solid #f3f4f6;
+  border-bottom: 2px solid #f3f4f6;
   margin: 16px 0;
-  padding: 12px 0;
-  border-top: 1px solid #e5e7eb;
-  border-bottom: 1px solid #e5e7eb;
+  padding: 16px 0;
 }
 
-.detail-row {
+.two-col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.detail-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  font-size: 13px;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.detail-row .label {
-  font-weight: 500;
-  color: #6b7280;
+.detail-item .label {
+  font-size: 11px;
+  color: #9ca3af;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
 }
 
-.detail-row .value {
+.detail-item .value {
+  font-size: 14px;
   color: #1f2937;
-  text-align: right;
-  flex: 1;
-  margin-left: 12px;
+  font-weight: 600;
 }
 
 .request-actions {

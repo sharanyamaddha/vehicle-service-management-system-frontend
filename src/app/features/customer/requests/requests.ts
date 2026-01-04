@@ -1,7 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ServiceRequestService, ServiceRequest } from '../../../core/services/service-request';
+import { VehicleService, Vehicle } from '../../../core/services/vehicle';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-requests',
@@ -12,28 +14,44 @@ import { ServiceRequestService, ServiceRequest } from '../../../core/services/se
 })
 export class Requests implements OnInit {
   requests: ServiceRequest[] = [];
+  vehiclesMap: Map<string, string> = new Map();
   isLoading: boolean = false;
   customerId: string = '';
 
   constructor(
     private readonly serviceRequestService: ServiceRequestService,
-    private readonly cdr: ChangeDetectorRef
-  ) {}
+    private readonly vehicleService: VehicleService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly router: Router
+  ) { }
 
   ngOnInit(): void {
     this.customerId = sessionStorage.getItem('userId') || '';
     if (this.customerId) {
-      this.loadRequests();
+      this.loadData();
     }
   }
 
-  loadRequests(): void {
+  loadData(): void {
     this.isLoading = true;
-    this.serviceRequestService.getCustomerRequests(this.customerId).subscribe({
-      next: (data) => {
-        this.requests = Array.isArray(data)
-          ? data.filter((request) => request.customerId === this.customerId)
+    forkJoin({
+      requests: this.serviceRequestService.getCustomerRequests(this.customerId),
+      vehicles: this.vehicleService.getVehiclesByCustomerId(this.customerId)
+    }).subscribe({
+      next: ({ requests, vehicles }) => {
+        // Map vehicles
+        vehicles.forEach(v => {
+          if (v.id) {
+            this.vehiclesMap.set(v.id, `${v.make} ${v.model}`);
+          }
+        });
+
+        // Filter and sort requests
+        this.requests = Array.isArray(requests)
+          ? requests.filter((request) => request.customerId === this.customerId)
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
           : [];
+
         this.isLoading = false;
         this.cdr.detectChanges();
       },
@@ -44,37 +62,29 @@ export class Requests implements OnInit {
     });
   }
 
+  getVehicleName(vehicleId: string): string {
+    return this.vehiclesMap.get(vehicleId) || vehicleId || 'Unknown Vehicle';
+  }
+
   getStatusBadgeClass(status: string): string {
     const statusMap: { [key: string]: string } = {
-      'BOOKED': 'status-booked',
-      'ASSIGNED': 'status-assigned',
-      'IN_PROGRESS': 'status-in-progress',
-      'COMPLETED': 'status-completed',
-      'CLOSED': 'status-closed'
+      'BOOKED': 'status-requested',    // Grey (User asked for REQUESTED, assuming BOOKED corresponds)
+      'REQUESTED': 'status-requested', // Grey
+      'ASSIGNED': 'status-assigned',   // Blue
+      'IN_PROGRESS': 'status-in-progress', // Orange
+      'COMPLETED': 'status-completed', // Yellow
+      'CLOSED': 'status-closed'        // Green
     };
     return statusMap[status] || 'status-default';
   }
 
   getStatusLabel(status: string): string {
-    const labels: { [key: string]: string } = {
-      'BOOKED': 'Booked',
-      'ASSIGNED': 'Assigned',
-      'IN_PROGRESS': 'In Progress',
-      'COMPLETED': 'Completed',
-      'CLOSED': 'Closed'
-    };
-    return labels[status] || status;
+    if (status === 'BOOKED' || status === 'REQUESTED') return 'Requested';
+    return status.replace('_', ' ');
   }
 
-  isViewDetailsEnabled(status: string): boolean {
-    return ['BOOKED', 'ASSIGNED', 'IN_PROGRESS'].includes(status);
-  }
-
-  isWaitingForInvoice(status: string): boolean {
-    return status === 'COMPLETED';
-  }
-
-  isViewInvoiceEnabled(status: string): boolean {
-    return status === 'CLOSED';
+  viewDetails(request: ServiceRequest): void {
+    // Navigate to detail page
+    this.router.navigate(['/customer/requests', request.id]);
   }
 }
