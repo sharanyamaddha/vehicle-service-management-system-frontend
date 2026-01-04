@@ -6,10 +6,10 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class HttpBase {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private headers() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     return {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

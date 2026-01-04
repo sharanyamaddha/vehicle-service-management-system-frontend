@@ -46,7 +46,7 @@ export class Navbar {
 
         switch (role.toUpperCase()) {
             case 'ADMIN':
-                this.router.navigate(['/admin/dashboard']);
+                this.router.navigate(['/admin']);
                 break;
             case 'TECHNICIAN':
                 this.router.navigate(['/technician/dashboard']);

@@ -49,9 +49,9 @@ export class Login implements OnInit {
 
     this.authService.login(loginData).subscribe({
       next: (response: any) => {
-        // Save token and userId temporarily
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('userId', response.userId);
+        // Save token and userId temporarily to sessionStorage (required for HttpBase)
+        sessionStorage.setItem('token', response.token);
+        sessionStorage.setItem('userId', response.userId);
 
         // Fetch user profile to get the role
         this.http.get('/api/users/me').subscribe({
@@ -82,7 +82,7 @@ export class Login implements OnInit {
 
     switch (role?.toUpperCase()) {
       case 'ADMIN':
-        this.router.navigate(['/admin/dashboard']);
+        this.router.navigate(['/admin']);
         break;
       case 'TECHNICIAN':
         this.router.navigate(['/technician/dashboard']);
