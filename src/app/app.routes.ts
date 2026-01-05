@@ -3,7 +3,7 @@ import { Home } from './features/public/home/home';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
 import { NoAuthGuard } from './core/guards/no-auth.guard';
-import { ManagerDashboard } from './features/manager/manager-dashboard/manager-dashboard';
+
 import { TechnicianDashboard } from './features/technician/technician-dashboard/technician-dashboard';
 import { PublicLayout } from './shared/layouts/public-layout/public-layout';
 import { DashboardLayout } from './shared/layouts/dashboard-layout/dashboard-layout';
@@ -51,6 +51,19 @@ export const routes: Routes = [
       { path: 'book-service/:vehicleId', loadComponent: () => import('./features/customer/book-service/book-service').then(m => m.BookService) }
     ]
   },
-  { path: 'manager', children: [{ path: 'dashboard', component: ManagerDashboard }] },
+  // Manager Dashboard
+  {
+    path: 'manager',
+    component: DashboardLayout,
+    children: [
+      { path: '', redirectTo: 'requests', pathMatch: 'full' },
+      { path: 'requests', loadComponent: () => import('./features/manager/requests/requests').then(m => m.Requests) },
+      { path: 'requests/:id', loadComponent: () => import('./features/manager/request-detail/request-detail').then(m => m.ManagerRequestDetail) },
+      { path: 'inventory-usage', loadComponent: () => import('./features/manager/inventory-usage/inventory-usage').then(m => m.InventoryUsage) },
+      { path: 'low-stock-alerts', loadComponent: () => import('./features/manager/low-stock-alerts/low-stock-alerts').then(m => m.LowStockAlerts) },
+      { path: 'low-stock-alerts', loadComponent: () => import('./features/manager/low-stock-alerts/low-stock-alerts').then(m => m.LowStockAlerts) },
+      { path: 'dashboard', redirectTo: 'requests', pathMatch: 'full' }
+    ]
+  },
   { path: 'technician', children: [{ path: 'dashboard', component: TechnicianDashboard }] },
 ];
