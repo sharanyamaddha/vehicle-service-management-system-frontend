@@ -1,0 +1,214 @@
+.page-container {
+    padding: 2rem;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+/* Transform Summary Card to horizontal */
+.summary-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.summary-item label {
+    display: block;
+    color: #6c757d;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
+
+.summary-item .value {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #2c3e50;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.35em 0.8em;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.badge-grey {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.badge-blue {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.badge-orange {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.badge-yellow {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Completed is green-ish or reuse success */
+.badge-green {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Assignment Panel */
+.assignment-panel {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid #eee;
+    padding: 1.5rem;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.custom-select {
+    max-width: 300px;
+    border-radius: 8px;
+    border-color: #dee2e6;
+    height: 45px;
+}
+
+/* Tech Table */
+.tech-table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+
+.tech-table th {
+    background-color: #f8f9fa;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-top: none;
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.tech-table tbody tr {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.tech-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.tech-table tbody tr.selected {
+    background-color: #e8f0fe;
+}
+
+.tech-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.tech-name {
+    font-weight: 500;
+}
+
+.tech-spec {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+/* Workload Indicator */
+.workload-indicator {
+    font-weight: 600;
+}
+
+.workload-indicator.high-load {
+    color: #dc3545;
+}
+
+/* Bays Grid */
+.bays-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.bay-card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+    background: white;
+}
+
+.bay-card:hover {
+    border-color: #0d6efd;
+    background-color: #f8f9fa;
+}
+
+.bay-card.selected {
+    border-color: #0d6efd;
+    background-color: #e8f0fe;
+    color: #0d6efd;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(13, 110, 253, 0.2);
+}
+
+.bay-icon {
+    font-size: 1.2rem;
+}
+
+/* Footer */
+.action-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.assign-btn {
+    min-width: 200px;
+    border-radius: 8px;
+    padding: 0.8rem 1.5rem;
+    font-weight: 600;
+}
+
+.loading-overlay {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f8f9fa;
+}

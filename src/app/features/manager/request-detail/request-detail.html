@@ -1,0 +1,142 @@
+<div class="container-fluid page-container" *ngIf="!isLoading; else loading">
+
+    <!-- Top Section: Summary Card -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card summary-card">
+                <div class="card-body">
+                    <h5 class="card-title">Service Request Summary</h5>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <label>Vehicle Name</label>
+                            <span class="value">{{ vehicle ? (vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model) :
+                                'Loading...' }}</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>Service Type</label>
+                            <span class="value">{{ request.issue }}</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>Customer</label>
+                            <span class="value">{{ customerName }}</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>Current Status</label>
+                            <span [class]="'status-badge ' + getBadgeClass(request.status)">
+                                {{ request.status }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Section: Assignment Panel -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card assignment-panel">
+                <div class="card-header">
+                    <h3>Technician Assignment Panel</h3>
+                </div>
+                <div class="card-body">
+
+                    <form [formGroup]="assignForm" (ngSubmit)="onSubmit()">
+
+                        <!-- 1. Specialization Dropdown -->
+                        <div class="filter-section mb-4">
+                            <label class="form-label">Technician Specialization</label>
+                            <select class="form-select custom-select" (change)="onSpecializationChange($event)"
+                                [value]="selectedSpecialization">
+                                <option value="ALL">All Specializations</option>
+                                <option value="ENGINE">Engine</option>
+                                <option value="ELECTRICAL">Electrical</option>
+                                <option value="BODYWORK">Bodywork</option>
+                                <option value="GENERAL">General</option>
+                            </select>
+                        </div>
+
+                        <!-- 2. Technicians Table -->
+                        <div class="table-responsive tech-table-container mb-4">
+                            <table class="table table-hover tech-table">
+                                <thead>
+                                    <tr>
+                                        <th>Technician Name</th>
+                                        <th>Current Workload</th>
+                                        <th>Availability</th>
+                                        <th>Select</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let tech of filteredTechnicians"
+                                        [class.selected]="assignForm.get('technicianId')?.value === tech.id">
+                                        <td>
+                                            <div class="tech-info">
+                                                <span class="tech-name">{{ tech.username }}</span>
+                                                <small class="tech-spec">{{ tech.specialization }}</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="workload-indicator"
+                                                [class.high-load]="tech.workload >= (tech.maxCapacity || 5)">
+                                                {{ tech.workload || 0 }} / {{ tech.maxCapacity || 5 }}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge" [class.bg-success]="tech.available"
+                                                [class.bg-danger]="!tech.available">
+                                                {{ tech.available ? 'Yes' : 'No' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio"
+                                                    formControlName="technicianId" [value]="tech.id"
+                                                    [disabled]="!tech.available || (tech.workload >= (tech.maxCapacity || 5))">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="filteredTechnicians.length === 0">
+                                        <td colspan="4" class="text-center text-muted py-3">No technicians found
+                                            matching criteria.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 3. Available Bays -->
+                        <div class="bays-section mb-4">
+                            <label class="form-label d-block">Available Service Bays</label>
+                            <div class="bays-grid">
+                                <div *ngFor="let bay of availableBays" class="bay-card"
+                                    [class.selected]="assignForm.get('bayId')?.value === bay.bayNumber"
+                                    (click)="selectBay(bay.bayNumber)">
+                                    <span class="bay-icon">🏗️</span>
+                                    <span class="bay-number">Bay {{ bay.bayNumber }}</span>
+                                </div>
+                            </div>
+                            <input type="hidden" formControlName="bayId">
+                        </div>
+
+                        <!-- 4. Assign Button -->
+                        <div class="action-footer">
+                            <button type="submit" class="btn btn-primary btn-lg assign-btn"
+                                [disabled]="assignForm.invalid || isSubmitting">
+                                {{ isSubmitting ? 'Processing...' : 'Assign Technician & Bay' }}
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<ng-template #loading>
+    <div class="loading-overlay">
+        <div class="spinner-border text-primary" role="status"></div>
+        <span class="ms-2">Loading Request Details...</span>
+    </div>
+</ng-template>
