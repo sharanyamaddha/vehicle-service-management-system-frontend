@@ -27,6 +27,10 @@ export class VehicleService extends HttpBase {
         return this.get<Vehicle[]>(`/api/vehicles/customer/${customerId}`);
     }
 
+    getAllVehicles(): Observable<Vehicle[]> {
+        return this.get<Vehicle[]>('/api/vehicles');
+    }
+
     addVehicle(vehicle: Vehicle): Observable<any> {
         return this.post('/api/vehicles', vehicle);
     }

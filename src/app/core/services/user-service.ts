@@ -57,4 +57,12 @@ export class UserService {
   resendInvite(userId: string): Observable<any> {
     return this.http.post(`/api/users/${userId}/resend-invite`, {});
   }
+
+  getAvailableTechnicians(): Observable<any[]> {
+    return this.http.get<any[]>('/api/technicians/status/true');
+  }
+
+  getTechniciansBySpecialization(spec: string): Observable<any[]> {
+    return this.http.get<any[]>(`/api/technicians/specialization/${spec}`);
+  }
 }
