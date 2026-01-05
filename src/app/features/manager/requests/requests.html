@@ -1,1 +1,42 @@
-<p>requests works!</p>
+<div class="requests-view">
+    <div class="page-header">
+        <h2>Service Requests Management</h2>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Vehicle</th>
+                    <th>Customer</th>
+                    <th>Service Type</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let request of requests">
+                    <td><span class="req-id">{{ getRequestIdDisplay(request) }}</span></td>
+                    <td>{{ getVehicleDisplay(request.vehicleId) }}</td>
+                    <td>{{ getCustomerName(request.customerId) }}</td>
+                    <td>{{ request.issue }}</td>
+                    <td>
+                        <span [class]="'status-badge ' + getBadgeClass(request.status)">
+                            {{ request.status }}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn-action" (click)="viewAssign(request)">
+                            View & Assign
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="requests.length === 0 && !isLoading">
+                    <td colspan="6" class="empty-cell">No requests found.</td>
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="isLoading" class="loading-overlay">Loading...</div>
+    </div>
+</div>
