@@ -1,1 +1,266 @@
-<p>inventory-usage works!</p>
+<div class="page-container fade-in">
+    <div class="header-section">
+        <h2>Inventory Management</h2>
+    </div>
+
+
+    <div class="tabs">
+        <button class="tab-btn" [class.active]="activeTab === 'catalog'" (click)="activeTab = 'catalog'">
+            Parts Catalog
+        </button>
+        <button class="tab-btn" [class.active]="activeTab === 'alerts'" (click)="activeTab = 'alerts'">
+            Low Stock Alerts
+            <span class="tab-badge" *ngIf="lowStockParts.length > 0">{{ lowStockParts.length }}</span>
+        </button>
+        <button class="tab-btn" [class.active]="activeTab === 'requests'" (click)="activeTab = 'requests'">
+            Technician Requests
+            <span class="tab-badge" *ngIf="pendingRequests.length > 0">{{ pendingRequests.length }}</span>
+        </button>
+    </div>
+
+
+    <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2 text-muted">Loading inventory data...</p>
+    </div>
+
+
+    <div *ngIf="!isLoading && activeTab === 'catalog'" class="fade-in">
+        <div class="card">
+            <div class="card-header">
+                <h5>Parts Catalog</h5>
+                <button class="btn btn-primary" (click)="openAddModal()">
+                    <i class="fas fa-plus"></i> Add New Part
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Part Name</th>
+                            <th>Category</th>
+                            <th>Stock Level</th>
+                            <th>Price</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr *ngFor="let part of healthyParts" id="part-row-{{part.id}}">
+                            <td>
+                                <div class="font-bold text-dark">{{ part.name }}</div>
+                            </td>
+                            <td><span class="badge badge-light">{{ part.category }}</span></td>
+                            <td>
+                                <span class="text-success font-bold">{{ part.stock }}</span>
+                            </td>
+                            <td>₹{{ part.price }}</td>
+                            <td class="text-end">
+                                <button class="btn btn-sm btn-outline-primary" (click)="openRestockModal(part)">
+                                    Restock
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="healthyParts.length === 0">
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                No healthy inventory items found. Check Alerts tab.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="!isLoading && activeTab === 'alerts'" class="fade-in">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="text-danger">Low Stock Items</h5>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Part Name</th>
+                            <th>Category</th>
+                            <th>Stock Level</th>
+                            <th>Alert Threshold</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let part of lowStockParts">
+                            <td>
+                                <div class="font-bold text-dark">{{ part.name }}</div>
+                            </td>
+                            <td><span class="badge badge-light">{{ part.category }}</span></td>
+                            <td class="text-danger font-bold">{{ part.stock }}</td>
+                            <td>{{ part.reorderLevel }}</td>
+                            <td class="text-end">
+                                <button class="btn btn-sm btn-danger" (click)="openRestockModal(part)">
+                                    Restock Now
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="lowStockParts.length === 0">
+                            <td colspan="5" class="empty-state">
+                                <i class="fas fa-check-circle fa-2x"></i>
+                                <h5>No Alerts</h5>
+                                <p>All items are well stocked.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="!isLoading && activeTab === 'requests'" class="fade-in">
+        <div *ngIf="pendingRequests.length === 0" class="empty-state">
+            <div class="mb-3">
+                <i class="fas fa-check-circle fa-3x"></i>
+            </div>
+            <h5>All caught up!</h5>
+            <p>No pending part approvals from technicians.</p>
+        </div>
+
+        <div class="card" *ngIf="pendingRequests.length > 0">
+            <div class="card-header">
+                <h5>Pending Approvals</h5>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Job ID</th>
+                            <th>Technician</th>
+                            <th>Requested Parts</th>
+                            <th>Requested At</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let req of pendingRequests">
+                            <td>#{{ req.requestNumber }}</td>
+                            <td>{{ getTechName(req.technicianId) }}</td>
+                            <td>
+                                <div *ngFor="let part of req.usedParts">
+                                    <strong>{{ part.partName }}</strong> (x{{ part.quantity }})
+                                </div>
+                            </td>
+                            <td>{{ req.partsRequestedAt | date:'medium' }}</td>
+                            <td class="text-end">
+                                <button class="btn btn-sm btn-success me-2" (click)="approveParts(req.id)">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" (click)="rejectParts(req.id)">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-backdrop" *ngIf="showAddModal" (click)="showAddModal = false">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <h3>Add New Inventory Item</h3>
+            <form [formGroup]="addItemForm" (ngSubmit)="submitNewItem()">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>Part Name</label>
+                        <input type="text" formControlName="name" class="form-control" placeholder="e.g. Brake Pads">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select formControlName="category" class="form-select">
+                            <option value="GENERAL">General</option>
+                            <option value="ENGINE">Engine</option>
+                            <option value="ELECTRICAL">Electrical</option>
+                            <option value="BODY">Body</option>
+                            <option value="TIRES">Tires</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Unit Price (₹)</label>
+                        <input type="number" formControlName="price" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Initial Stock</label>
+                        <input type="number" formControlName="stock" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Reorder Level</label>
+                        <input type="number" formControlName="reorderLevel" class="form-control">
+                    </div>
+                </div>
+
+
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" (click)="showAddModal = false">Cancel</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!addItemForm.valid">Save Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="modal-backdrop" *ngIf="showRestockModal" (click)="showRestockModal = false">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <h3>Request Restock</h3>
+            <div class="mb-4">
+                <p><strong>Part:</strong> {{ selectedPart?.name }}</p>
+                <p><strong>Current Stock:</strong> {{ selectedPart?.stock }}</p>
+                <p><strong>Reorder Target:</strong> {{ selectedPart?.reorderLevel }}</p>
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Quantity to Order</label>
+                <input type="number" [(ngModel)]="restockQty" class="form-control" min="1">
+            </div>
+            <div class="form-group mb-3">
+                <label>Reason / Notes</label>
+                <textarea [(ngModel)]="restockReason" class="form-control" rows="2"></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" (click)="showRestockModal = false">Cancel</button>
+                <button type="button" class="btn btn-success" (click)="confirmRestock()">Submit Request</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal-backdrop" *ngIf="dialogVisible">
+    <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header">
+            <h3>{{ dialogTitle }}</h3>
+        </div>
+        <div class="modal-body">
+            <p [class.text-danger]="dialogType === 'error'">{{ dialogMessage }}</p>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="dialogType === 'confirm'" class="btn btn-secondary" (click)="closeDialog()">Cancel</button>
+            <button *ngIf="dialogType === 'confirm'" class="btn btn-primary"
+                (click)="handleDialogConfirm()">Confirm</button>
+            <button *ngIf="dialogType !== 'confirm'" class="btn btn-primary" (click)="closeDialog()">OK</button>
+        </div>
+    </div>
+</div>

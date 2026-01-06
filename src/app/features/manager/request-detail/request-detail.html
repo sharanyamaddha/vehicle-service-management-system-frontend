@@ -1,6 +1,6 @@
 <div class="container-fluid page-container" *ngIf="!isLoading; else loading">
 
-    <!-- Top Section: Summary Card -->
+
     <div class="row mb-4">
         <div class="col-12">
             <div class="card summary-card">
@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <!-- Bottom Section: Assignment Panel -->
+
     <div class="row">
         <div class="col-12">
             <div class="card assignment-panel">
@@ -41,22 +41,63 @@
                 </div>
                 <div class="card-body">
 
-                    <form [formGroup]="assignForm" (ngSubmit)="onSubmit()">
 
-                        <!-- 1. Specialization Dropdown -->
-                        <div class="filter-section mb-4">
-                            <label class="form-label">Technician Specialization</label>
-                            <select class="form-select custom-select" (change)="onSpecializationChange($event)"
-                                [value]="selectedSpecialization">
-                                <option value="ALL">All Specializations</option>
-                                <option value="ENGINE">Engine</option>
-                                <option value="ELECTRICAL">Electrical</option>
-                                <option value="BODYWORK">Bodywork</option>
-                                <option value="GENERAL">General</option>
-                            </select>
+                    <div *ngIf="request.technicianId && !isEditing" class="assigned-view">
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                <label class="text-muted small">Assigned Technician</label>
+                                <div class="fw-bold fs-5">{{ assignedTech?.username || 'Unknown' }}</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="text-muted small">Service Bay</label>
+                                <div class="fw-bold fs-5">Bay #{{ request.bayNumber }}</div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <button *ngIf="request.status === 'COMPLETED'" class="btn btn-success me-2"
+                                    (click)="closeService()">
+                                    Close Service
+                                </button>
+                                <button class="btn btn-outline-primary" (click)="isEditing = true"
+                                    [disabled]="request.status === 'CLOSED'">
+                                    Change Assignment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <form *ngIf="!request.technicianId || isEditing" [formGroup]="assignForm" (ngSubmit)="onSubmit()">
+
+                        <div class="d-flex justify-content-between mb-3" *ngIf="isEditing">
+                            <h6 class="text-primary">Re-assigning Technician</h6>
+                            <button type="button" class="btn btn-sm btn-link text-muted"
+                                (click)="isEditing = false">Cancel</button>
                         </div>
 
-                        <!-- 2. Technicians Table -->
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Technician Specialization</label>
+                                <select class="form-select custom-select" (change)="onSpecializationChange($event)"
+                                    [value]="selectedSpecialization">
+                                    <option value="ALL">All Specializations</option>
+                                    <option value="ENGINE">Engine</option>
+                                    <option value="ELECTRICAL">Electrical</option>
+                                    <option value="BODYWORK">Bodywork</option>
+                                    <option value="GENERAL">General</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Sort By</label>
+                                <select class="form-select custom-select" (change)="onSortChange($event)"
+                                    [value]="sortOption">
+                                    <option value="WORKLOAD">Workload (Low to High)</option>
+                                    <option value="AVAILABILITY">Availability (Available first)</option>
+                                </select>
+                            </div>
+                        </div>
+
+
                         <div class="table-responsive tech-table-container mb-4">
                             <table class="table table-hover tech-table">
                                 <thead>
@@ -69,30 +110,26 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let tech of filteredTechnicians"
-                                        [class.selected]="assignForm.get('technicianId')?.value === tech.id">
+                                        [class.selected]="assignForm.get('technicianId')?.value === tech.userId">
                                         <td>
-                                            <div class="tech-info">
-                                                <span class="tech-name">{{ tech.username }}</span>
-                                                <small class="tech-spec">{{ tech.specialization }}</small>
-                                            </div>
+                                            <span class="tech-name">{{ tech.username }}</span>
                                         </td>
                                         <td>
-                                            <div class="workload-indicator"
-                                                [class.high-load]="tech.workload >= (tech.maxCapacity || 5)">
-                                                {{ tech.workload || 0 }} / {{ tech.maxCapacity || 5 }}
-                                            </div>
+                                            <span class="workload-value">{{ tech.jobCount || 0 }}</span>
                                         </td>
                                         <td>
-                                            <span class="badge" [class.bg-success]="tech.available"
-                                                [class.bg-danger]="!tech.available">
-                                                {{ tech.available ? 'Yes' : 'No' }}
+                                            <span class="badge"
+                                                [class.bg-success]="tech.availabilityStatus === 'Available'"
+                                                [class.bg-warning]="tech.availabilityStatus === 'Busy'"
+                                                [class.bg-danger]="tech.availabilityStatus === 'Unavailable'">
+                                                {{ tech.availabilityStatus }}
                                             </span>
                                         </td>
                                         <td>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio"
-                                                    formControlName="technicianId" [value]="tech.id"
-                                                    [disabled]="!tech.available || (tech.workload >= (tech.maxCapacity || 5))">
+                                                    formControlName="technicianId" [value]="tech.userId"
+                                                    [disabled]="!tech.available || (tech.jobCount >= (tech.maxCapacity || 5))">
                                             </div>
                                         </td>
                                     </tr>
@@ -104,25 +141,25 @@
                             </table>
                         </div>
 
-                        <!-- 3. Available Bays -->
+
                         <div class="bays-section mb-4">
                             <label class="form-label d-block">Available Service Bays</label>
                             <div class="bays-grid">
                                 <div *ngFor="let bay of availableBays" class="bay-card"
-                                    [class.selected]="assignForm.get('bayId')?.value === bay.bayNumber"
+                                    [class.selected]="assignForm.get('bayNumber')?.value === bay.bayNumber"
                                     (click)="selectBay(bay.bayNumber)">
-                                    <span class="bay-icon">🏗️</span>
                                     <span class="bay-number">Bay {{ bay.bayNumber }}</span>
                                 </div>
                             </div>
-                            <input type="hidden" formControlName="bayId">
+                            <input type="hidden" formControlName="bayNumber">
                         </div>
 
-                        <!-- 4. Assign Button -->
+
                         <div class="action-footer">
                             <button type="submit" class="btn btn-primary btn-lg assign-btn"
-                                [disabled]="assignForm.invalid || isSubmitting">
-                                {{ isSubmitting ? 'Processing...' : 'Assign Technician & Bay' }}
+                                [disabled]="assignForm.invalid || isSubmitting || request.status === 'CLOSED'">
+                                {{ isSubmitting ? 'Processing...' : (isEditing ? 'Update Assignment' : 'Assign
+                                Technician & Bay') }}
                             </button>
                         </div>
 
@@ -140,3 +177,42 @@
         <span class="ms-2">Loading Request Details...</span>
     </div>
 </ng-template>
+
+
+<div class="modal-backdrop" *ngIf="dialogVisible">
+    <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header">
+            <h3>{{ dialogTitle }}</h3>
+        </div>
+        <div class="modal-body">
+            <p [class.text-danger]="dialogType === 'error'">{{ dialogMessage }}</p>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="dialogType === 'confirm'" class="btn btn-secondary" (click)="closeDialog()">Cancel</button>
+            <button *ngIf="dialogType === 'confirm'" class="btn btn-primary"
+                (click)="handleDialogConfirm()">Confirm</button>
+            <button *ngIf="dialogType !== 'confirm'" class="btn btn-primary" (click)="closeDialog()">OK</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal-backdrop" *ngIf="showLaborCostModal">
+    <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header">
+            <h3>Close Service</h3>
+        </div>
+        <div class="modal-body">
+            <p>Please enter the final Labor Cost for this service.</p>
+            <div class="form-group">
+                <label>Labor Cost ($)</label>
+                <input type="number" class="form-control" [(ngModel)]="laborCostInput" min="0">
+            </div>
+            <p class="text-muted small mt-2">This will generate the final invoice and close the request.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="showLaborCostModal = false">Cancel</button>
+            <button class="btn btn-success" (click)="submitCloseService()">Close Service & Generate Invoice</button>
+        </div>
+    </div>
+</div>

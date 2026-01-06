@@ -167,9 +167,12 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    min-width: 100px;
     transition: all 0.2s;
     background: white;
+    font-weight: 500;
+    color: #495057;
 }
 
 .bay-card:hover {
@@ -182,7 +185,19 @@
     background-color: #e8f0fe;
     color: #0d6efd;
     font-weight: 600;
-    box-shadow: 0 2px 4px rgba(13, 110, 253, 0.2);
+    box-shadow: 0 0 0 1px #0d6efd;
+    /* Stronger highlight */
+}
+
+/* Specific Badge Colors for Availability */
+.bg-success {
+    background-color: #d1fae5 !important;
+    color: #065f46 !important;
+}
+
+.bg-danger {
+    background-color: #fee2e2 !important;
+    color: #991b1b !important;
 }
 
 .bay-icon {
@@ -211,4 +226,61 @@
     justify-content: center;
     align-items: center;
     background: #f8f9fa;
+}
+
+/* Modal Styles (Clean, No Animation) */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+}
+
+.modal-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    background: #f8fafc;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
 }

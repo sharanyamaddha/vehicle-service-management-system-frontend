@@ -1,1 +1,70 @@
-<p>low-stock-alerts works!</p>
+<div class="page-container">
+    <h2 class="mb-4">Low Stock Alerts</h2>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+    </div>
+
+    <div *ngIf="!isLoading && lowStockParts.length === 0" class="empty-state">
+        <p>No low stock alerts. Inventory is healthy.</p>
+    </div>
+
+    <div class="card" *ngIf="!isLoading && lowStockParts.length > 0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Part Name</th>
+                        <th>Current Stock</th>
+                        <th>Reorder Level</th>
+                        <th>Price</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let part of lowStockParts">
+                        <td>{{ part.name }}</td>
+                        <td class="text-danger fw-bold">{{ part.stock }}</td>
+                        <td>{{ part.reorderLevel }}</td>
+                        <td>${{ part.price }}</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-warning" (click)="openRestockModal(part)">
+                                Request Restock
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal-overlay" *ngIf="showModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Request Restock: {{ selectedPart?.name }}</h3>
+            <button class="close-btn" (click)="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group mb-3">
+                <label>Current Stock</label>
+                <input type="text" class="form-control" [value]="selectedPart?.stock" readonly disabled>
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Request Quantity</label>
+                <input type="number" class="form-control" [(ngModel)]="requestQty" min="1">
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Reason</label>
+                <textarea class="form-control" [(ngModel)]="reason" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary me-2" (click)="closeModal()">Cancel</button>
+            <button class="btn btn-primary" (click)="submitRestock()">Submit Request</button>
+        </div>
+    </div>
+</div>

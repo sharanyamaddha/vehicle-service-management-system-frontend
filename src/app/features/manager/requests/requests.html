@@ -1,6 +1,16 @@
 <div class="requests-view">
     <div class="page-header">
         <h2>Service Requests Management</h2>
+        <div class="filter-controls">
+            <select class="form-select filter-select" (change)="onStatusFilter($event)">
+                <option value="ALL">All Statuses</option>
+                <option value="REQUESTED">Requested</option>
+                <option value="ASSIGNED">Assigned</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CLOSED">Closed</option>
+            </select>
+        </div>
     </div>
 
     <div class="table-container">
@@ -10,25 +20,32 @@
                     <th>Request ID</th>
                     <th>Vehicle</th>
                     <th>Customer</th>
+                    <th>Technician</th>
                     <th>Service Type</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let request of requests">
+                <tr *ngFor="let request of filteredRequests">
                     <td><span class="req-id">{{ getRequestIdDisplay(request) }}</span></td>
                     <td>{{ getVehicleDisplay(request.vehicleId) }}</td>
                     <td>{{ getCustomerName(request.customerId) }}</td>
+                    <td>{{ getTechName(request.technicianId) }}</td>
                     <td>{{ request.issue }}</td>
                     <td>
                         <span [class]="'status-badge ' + getBadgeClass(request.status)">
-                            {{ request.status }}
+                            {{ request.status === 'COMPLETED' ? 'Completed (Waiting Closure)' :
+                            request.status.replace('_', ' ') }}
                         </span>
                     </td>
                     <td>
+                        <button *ngIf="request.status === 'COMPLETED'" class="btn-action close-btn me-2"
+                            (click)="closeRequest(request.id)">
+                            Close Service
+                        </button>
                         <button class="btn-action" (click)="viewAssign(request)">
-                            View & Assign
+                            View Details
                         </button>
                     </td>
                 </tr>
@@ -38,5 +55,44 @@
             </tbody>
         </table>
         <div *ngIf="isLoading" class="loading-overlay">Loading...</div>
+    </div>
+</div>
+
+
+
+<div class="modal-backdrop" *ngIf="showLaborCostModal" style="z-index: 2000;">
+    <div class="modal-content" style="max-width: 400px; padding: 24px;">
+        <div class="modal-header" style="margin-bottom: 16px;">
+            <h3 style="margin: 0; font-size: 18px;">Close Service</h3>
+        </div>
+        <div class="modal-body" style="margin-bottom: 24px;">
+            <p style="margin-bottom: 16px; color: #374151;">Please enter the Labor Cost for this service:</p>
+            <div class="form-group">
+                <input type="number" class="form-control" [(ngModel)]="laborCostInput" placeholder="e.g. 500" min="0">
+            </div>
+        </div>
+        <div class="modal-actions"
+            style="margin-top: 0; padding-top: 0; border: none; justify-content: flex-end; display: flex; gap: 10px;">
+            <button class="btn-secondary" (click)="closeLaborModal()">Cancel</button>
+            <button class="btn-primary" (click)="confirmCloseService()">Confirm & Close</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal-backdrop" *ngIf="dialogVisible" style="z-index: 2005;">
+    <div class="modal-content" style="max-width: 400px; padding: 24px;">
+        <div class="modal-header" style="margin-bottom: 16px;">
+            <h3 style="margin: 0; font-size: 18px;">{{ dialogTitle }}</h3>
+        </div>
+        <div class="modal-body" style="margin-bottom: 24px;">
+            <p [class.text-danger]="dialogType === 'error'" style="margin: 0; color: #374151;">{{ dialogMessage }}</p>
+        </div>
+        <div class="modal-actions" style="margin-top: 0; padding-top: 0; border: none;">
+            <button *ngIf="dialogType === 'confirm'" class="btn-secondary" (click)="closeDialog()">Cancel</button>
+            <button *ngIf="dialogType === 'confirm'" class="btn-primary"
+                (click)="handleDialogConfirm()">Confirm</button>
+            <button *ngIf="dialogType !== 'confirm'" class="btn-primary" (click)="closeDialog()">OK</button>
+        </div>
     </div>
 </div>

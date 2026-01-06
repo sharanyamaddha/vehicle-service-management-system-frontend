@@ -1,0 +1,47 @@
+<div class="page-container">
+    <h2 class="mb-4">Parts Approval Requests</h2>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+    </div>
+
+    <div *ngIf="!isLoading && pendingRequests.length === 0" class="empty-state">
+        <p>No pending part requests.</p>
+    </div>
+
+    <div class="card" *ngIf="!isLoading && pendingRequests.length > 0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Job ID</th>
+                        <th>Technician</th>
+                        <th>Requested Parts</th>
+                        <th>Requested At</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let req of pendingRequests">
+                        <td>#{{ req.requestNumber }}</td>
+                        <td>{{ getTechName(req.technicianId || '') }}</td>
+                        <td>
+                            <div *ngFor="let part of req.usedParts">
+                                <strong>{{ part.partName }}</strong> (x{{ part.quantity }})
+                            </div>
+                        </td>
+                        <td>{{ req.partsRequestedAt | date:'medium' }}</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-success me-2" (click)="approveParts(req.id)">
+                                Approve
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" (click)="rejectParts(req.id)">
+                                Reject
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
