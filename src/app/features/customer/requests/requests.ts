@@ -3,26 +3,42 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { ServiceRequestService, ServiceRequest } from '../../../core/services/service-request';
 import { VehicleService, Vehicle } from '../../../core/services/vehicle';
+import { InvoiceService, Invoice } from '../../../core/services/invoice';
 import { forkJoin } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-requests',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './requests.html',
   styleUrl: './requests.css'
 })
 export class Requests implements OnInit {
-  requests: ServiceRequest[] = [];
+  allRequests: ServiceRequest[] = [];
+  filteredRequests: ServiceRequest[] = [];
   vehiclesMap: Map<string, string> = new Map();
+  invoicesMap: Map<string, Invoice> = new Map();
   isLoading: boolean = false;
   customerId: string = '';
 
+  selectedFilter: string = 'ALL_ACTIVE'; // Default: All except History (Closed+Paid)
+
+  filterOptions = [
+    { label: 'Active (All)', value: 'ALL_ACTIVE' },
+    { label: 'Requested', value: 'REQUESTED' },
+    { label: 'Assigned', value: 'ASSIGNED' },
+    { label: 'In Progress', value: 'IN_PROGRESS' },
+    { label: 'Completed', value: 'COMPLETED' },
+    { label: 'Closed (Unpaid)', value: 'CLOSED_UNPAID' }
+  ];
+
   constructor(
-    private readonly serviceRequestService: ServiceRequestService,
-    private readonly vehicleService: VehicleService,
-    private readonly cdr: ChangeDetectorRef,
-    private readonly router: Router
+    private serviceRequestService: ServiceRequestService,
+    private vehicleService: VehicleService,
+    private invoiceService: InvoiceService,
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -36,22 +52,27 @@ export class Requests implements OnInit {
     this.isLoading = true;
     forkJoin({
       requests: this.serviceRequestService.getCustomerRequests(this.customerId),
-      vehicles: this.vehicleService.getVehiclesByCustomerId(this.customerId)
+      vehicles: this.vehicleService.getVehiclesByCustomerId(this.customerId),
+      invoices: this.invoiceService.getCustomerInvoices(this.customerId)
     }).subscribe({
-      next: ({ requests, vehicles }) => {
+      next: ({ requests, vehicles, invoices }) => {
         // Map vehicles
         vehicles.forEach(v => {
-          if (v.id) {
-            this.vehiclesMap.set(v.id, `${v.make} ${v.model}`);
-          }
+          if (v.id) this.vehiclesMap.set(v.id, `${v.make} ${v.model}`);
         });
 
-        // Filter and sort requests
-        this.requests = Array.isArray(requests)
+        // Map Invoices
+        (invoices || []).forEach(inv => {
+          this.invoicesMap.set(inv.serviceRequestId, inv);
+        });
+
+        // Store all
+        this.allRequests = Array.isArray(requests)
           ? requests.filter((request) => request.customerId === this.customerId)
             .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
           : [];
 
+        this.applyFilter();
         this.isLoading = false;
         this.cdr.detectChanges();
       },
@@ -62,29 +83,48 @@ export class Requests implements OnInit {
     });
   }
 
+  applyFilter(): void {
+
+    this.filteredRequests = this.allRequests.filter(req => {
+      const inv = this.invoicesMap.get(req.id);
+      const isPaid = inv?.status === 'PAID';
+      const isClosed = req.status === 'CLOSED';
+
+      return req.status === this.selectedFilter;
+    });
+  }
+
+  onFilterChange(): void {
+    this.applyFilter();
+  }
+
   getVehicleName(vehicleId: string): string {
     return this.vehiclesMap.get(vehicleId) || vehicleId || 'Unknown Vehicle';
   }
 
   getStatusBadgeClass(status: string): string {
     const statusMap: { [key: string]: string } = {
-      'BOOKED': 'status-requested',    // Grey (User asked for REQUESTED, assuming BOOKED corresponds)
-      'REQUESTED': 'status-requested', // Grey
-      'ASSIGNED': 'status-assigned',   // Blue
-      'IN_PROGRESS': 'status-in-progress', // Orange
-      'COMPLETED': 'status-completed', // Yellow
-      'CLOSED': 'status-closed'        // Green
+      'BOOKED': 'status-requested',
+      'REQUESTED': 'status-requested',
+      'ASSIGNED': 'status-assigned',
+      'IN_PROGRESS': 'status-in-progress',
+      'COMPLETED': 'status-completed',
+      'CLOSED': 'status-closed'
     };
     return statusMap[status] || 'status-default';
   }
 
-  getStatusLabel(status: string): string {
+  getStatusLabel(status: string, reqId?: string): string {
+    if (status === 'CLOSED' && reqId) {
+      const inv = this.invoicesMap.get(reqId);
+      if (inv && inv.status === 'PENDING') return 'Unpaid';
+      if (inv && inv.status === 'PAID') return 'Closed (Paid)';
+    }
     if (status === 'BOOKED' || status === 'REQUESTED') return 'Requested';
     return status.replace('_', ' ');
   }
 
   viewDetails(request: ServiceRequest): void {
-    // Navigate to detail page
     this.router.navigate(['/customer/requests', request.id]);
   }
 }

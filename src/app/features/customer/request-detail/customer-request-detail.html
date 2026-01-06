@@ -1,0 +1,156 @@
+<div class="page-container" *ngIf="!isLoading; else loading">
+    <div class="header-section">
+        <button class="btn-back" routerLink="/customer/requests">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M19 12H5m7-7l-7 7 7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Back to Requests
+        </button>
+        <h1>Request Details #{{ request?.requestNumber || request?.id }}</h1>
+    </div>
+
+
+    <div class="timeline-card">
+        <div class="timeline">
+            <div class="timeline-step" *ngFor="let step of statusSteps; let i = index"
+                [class.completed]="i <= currentStepIndex" [class.active]="i === currentStepIndex">
+                <div class="step-circle">
+                    <span *ngIf="i < currentStepIndex">✓</span>
+                    <span *ngIf="i >= currentStepIndex">{{ i + 1 }}</span>
+                </div>
+                <div class="step-label">{{ step.replace('_',' ') }}</div>
+                <div class="step-line" *ngIf="i < statusSteps.length - 1"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="details-grid">
+
+        <div class="card summary-card">
+            <h3>Service Summary</h3>
+            <div class="info-group">
+                <label>Vehicle</label>
+                <div class="value">{{ vehicle?.year }} {{ vehicle?.make }} {{ vehicle?.model }}</div>
+                <div class="sub-value">{{ vehicle?.registrationNumber }}</div>
+            </div>
+            <div class="info-group">
+                <label>Service Type</label>
+                <div class="value">{{ request?.issue }}</div>
+            </div>
+            <div class="info-group">
+                <label>Requested Date</label>
+                <div class="value">{{ request?.createdAt | date:'medium' }}</div>
+            </div>
+            <div class="info-group">
+                <label>Priority</label>
+                <div class="value priority-badge" [class.high]="request?.priority === 'HIGH'">{{ request?.priority }}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card assignment-card" *ngIf="request?.status !== 'REQUESTED'">
+            <h3>Assignment Details</h3>
+            <div class="info-group">
+                <label>Technician</label>
+                <div class="value">{{ technicianName }}</div>
+            </div>
+            <div class="info-group">
+                <label>Service Bay</label>
+                <div class="value">{{ request?.bayNumber ? 'Bay #' + request?.bayNumber : 'Pending' }}</div>
+            </div>
+            <div class="info-group">
+                <label>Assigned By</label>
+                <div class="value">Manager</div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="invoice-banner" *ngIf="request?.status === 'CLOSED' || request?.status === 'COMPLETED'">
+        <div class="banner-content">
+            <div class="banner-text">
+                <h3>Service Completed</h3>
+                <p *ngIf="invoice">Invoice #{{ invoice.id }} is ready.</p>
+                <p *ngIf="!invoice">Invoice is being generated...</p>
+            </div>
+            <button class="btn-invoice" *ngIf="invoice" (click)="openInvoice()">
+                View Invoice
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<ng-template #loading>
+    <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading details...</p>
+    </div>
+</ng-template>
+
+
+<div class="modal-backdrop" *ngIf="showInvoiceModal && invoice">
+    <div class="modal-content invoice-modal">
+        <div class="modal-header">
+            <h3>Invoice #{{ invoice.id }}</h3>
+            <button class="close-btn" (click)="closeInvoice()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="invoice-header">
+                <div class="to-details">
+                    <label>Billed To:</label>
+                    <p>{{ request?.customerName || 'Customer' }}</p>
+                    <p>{{ vehicle?.make }} {{ vehicle?.model }} ({{ vehicle?.registrationNumber }})</p>
+                </div>
+                <div class="date-details">
+                    <label>Date:</label>
+                    <p>{{ invoice.createdAt | date }}</p>
+                    <label>Status:</label>
+                    <span class="status-badge" [class.paid]="invoice.status === 'PAID'">{{ invoice.status }}</span>
+                </div>
+            </div>
+
+
+            <h4 class="table-title">Parts / Services</h4>
+            <div class="invoice-table-wrapper">
+                <table class="invoice-table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th class="text-right">Qty</th>
+                            <th class="text-right">Unit Price</th>
+                            <th class="text-right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr *ngFor="let part of request?.usedParts">
+                            <td>{{ part.partName || 'Part' }}</td>
+                            <td class="text-right">{{ part.quantity }}</td>
+                            <td class="text-right">-</td>
+                            <td class="text-right">-</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Labor & Service Charges</td>
+                            <td class="text-right">{{ invoice.total | currency:'INR' }}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td colspan="3">Grand Total</td>
+                            <td class="text-right">{{ invoice.total | currency:'INR' }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" (click)="closeInvoice()">Close</button>
+            <button class="btn-primary" *ngIf="invoice.status !== 'PAID'" [disabled]="isPaying" (click)="payNow()">
+                {{ isPaying ? 'Processing...' : 'Pay Now' }}
+            </button>
+            <button class="btn-success" *ngIf="invoice.status === 'PAID'" disabled>Paid</button>
+        </div>
+    </div>
+</div>

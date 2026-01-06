@@ -6,10 +6,10 @@ import { VehicleService, Vehicle } from '../../../core/services/vehicle';
 import { InvoiceService, Invoice } from '../../../core/services/invoice';
 
 @Component({
-    selector: 'app-service-detail',
-    standalone: true,
-    imports: [CommonModule, RouterModule],
-    template: `
+  selector: 'app-service-detail',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  template: `
     <div class="detail-container">
       <div class="header">
         <button class="back-btn" routerLink="/customer/requests">← Back to Requests</button>
@@ -98,7 +98,7 @@ import { InvoiceService, Invoice } from '../../../core/services/invoice';
       </div>
     </div>
   `,
-    styles: [`
+  styles: [`
     .detail-container { max-width: 800px; margin: 0 auto; padding: 20px; }
     .header { display: flex; align-items: center; gap: 20px; margin-bottom: 24px; }
     .back-btn { background: none; border: none; font-size: 14px; color: #6b7280; cursor: pointer; }
@@ -141,67 +141,63 @@ import { InvoiceService, Invoice } from '../../../core/services/invoice';
   `]
 })
 export class ServiceDetailComponent implements OnInit {
-    request: ServiceRequest | null = null;
-    vehicle: Vehicle | null = null;
-    invoice: Invoice | null = null;
-    requestId: string | null = null;
+  request: ServiceRequest | null = null;
+  vehicle: Vehicle | null = null;
+  invoice: Invoice | null = null;
+  requestId: string | null = null;
 
-    constructor(
-        private route: ActivatedRoute,
-        private router: Router,
-        private serviceRequestService: ServiceRequestService,
-        private vehicleService: VehicleService,
-        private invoiceService: InvoiceService
-    ) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private serviceRequestService: ServiceRequestService,
+    private vehicleService: VehicleService,
+    private invoiceService: InvoiceService
+  ) { }
 
-    ngOnInit() {
-        this.requestId = this.route.snapshot.paramMap.get('id');
-        if (this.requestId) {
-            this.loadDetails(this.requestId);
-        }
+  ngOnInit() {
+    this.requestId = this.route.snapshot.paramMap.get('id');
+    if (this.requestId) {
+      this.loadDetails(this.requestId);
     }
+  }
 
-    loadDetails(id: string) {
-        this.serviceRequestService.getRequestById(id).subscribe(req => {
-            this.request = req;
-            if (req.vehicleId) {
-                this.vehicleService.getVehiclesByCustomerId(req.customerId).subscribe(vehicles => {
-                    this.vehicle = vehicles.find((v: Vehicle) => v.id === req.vehicleId) || null;
-                });
-            }
-
-            this.invoiceService.getCustomerInvoices(req.customerId).subscribe(invoices => {
-                // Find invoice matching this request
-                // Check if invoice has serviceRequestId or try to match otherwise
-                // The interface has serviceRequestId.
-                this.invoice = invoices.find((inv: Invoice) => inv.serviceRequestId === req.id) || null;
-            });
+  loadDetails(id: string) {
+    this.serviceRequestService.getRequestById(id).subscribe(req => {
+      this.request = req;
+      if (req.vehicleId) {
+        this.vehicleService.getVehiclesByCustomerId(req.customerId).subscribe(vehicles => {
+          this.vehicle = vehicles.find((v: Vehicle) => v.id === req.vehicleId) || null;
         });
-    }
+      }
 
-    getStatusClass(status: string): string {
-        const map: any = {
-            'BOOKED': 'status-requested',
-            'REQUESTED': 'status-requested',
-            'ASSIGNED': 'status-assigned',
-            'IN_PROGRESS': 'status-in-progress',
-            'COMPLETED': 'status-completed',
-            'CLOSED': 'status-closed'
-        };
-        return map[status] || '';
-    }
+      this.invoiceService.getCustomerInvoices(req.customerId).subscribe(invoices => {
+        this.invoice = invoices.find((inv: Invoice) => inv.serviceRequestId === req.id) || null;
+      });
+    });
+  }
 
-    getStatusLabel(status: string): string {
-        if (status === 'BOOKED' || status === 'REQUESTED') return 'Requested';
-        return status.replace('_', ' ');
-    }
+  getStatusClass(status: string): string {
+    const map: any = {
+      'BOOKED': 'status-requested',
+      'REQUESTED': 'status-requested',
+      'ASSIGNED': 'status-assigned',
+      'IN_PROGRESS': 'status-in-progress',
+      'COMPLETED': 'status-completed',
+      'CLOSED': 'status-closed'
+    };
+    return map[status] || '';
+  }
 
-    payInvoice() {
-        // Redirect to invoices
-        this.router.navigate(['/customer/invoices']);
-    }
+  getStatusLabel(status: string): string {
+    if (status === 'BOOKED' || status === 'REQUESTED') return 'Requested';
+    return status.replace('_', ' ');
+  }
 
-    viewInvoice() {
-        this.router.navigate(['/customer/invoices']);
-    }
+  payInvoice() {
+    this.router.navigate(['/customer/invoices']);
+  }
+
+  viewInvoice() {
+    this.router.navigate(['/customer/invoices']);
+  }
 }

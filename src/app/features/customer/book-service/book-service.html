@@ -10,83 +10,51 @@
     </div>
 
     <div *ngIf="!isLoading && vehicle" class="book-service-form">
-      <!-- Vehicle Summary -->
-      <div class="vehicle-summary">
-        <div class="summary-header">
-          <h4>Vehicle Information</h4>
+
+      <div class="vehicle-summary-clean">
+        <div class="summary-row">
+          <span class="s-label">Vehicle</span>
+          <span class="s-value">{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</span>
         </div>
-        <div class="vehicle-details">
-          <div class="detail-item">
-            <span class="label">Vehicle:</span>
-            <span class="value">{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</span>
-          </div>
-          <div class="detail-item">
-            <span class="label">Registration:</span>
-            <span class="value">{{ vehicle.registrationNumber }}</span>
-          </div>
-          <div class="detail-item">
-            <span class="label">Color:</span>
-            <span class="value">{{ vehicle.color }}</span>
-          </div>
-          <div class="detail-item">
-            <span class="label">Type:</span>
-            <span class="value">{{ vehicle.type }}</span>
-          </div>
+        <div class="summary-row">
+          <span class="s-label">Registration</span>
+          <span class="s-value s-reg">{{ vehicle.registrationNumber }}</span>
+        </div>
+        <div class="summary-row">
+          <span class="s-label">Details</span>
+          <span class="s-value">{{ vehicle.color }} • {{ vehicle.type }}</span>
         </div>
       </div>
 
-      <!-- Booking Form -->
-      <form [formGroup]="bookForm" (ngSubmit)="submitBooking()" class="booking-form">
+
+      <form [formGroup]="bookForm" (ngSubmit)="submitBooking()" class="booking-form-compact">
         <div class="form-section">
-          <h5>Service Details</h5>
 
           <div class="form-field">
-            <label for="issue">Issue/Service Required *</label>
-            <textarea 
-              id="issue"
-              formControlName="issue" 
-              placeholder="Describe the issue or service you need (e.g., Engine trouble, Brake inspection, Regular maintenance, etc.)"
-              rows="4"
-              [class.is-invalid]="bookForm.get('issue')?.invalid && bookForm.get('issue')?.touched">
+            <label for="issue">Describe Issue or Service Required</label>
+            <textarea id="issue" formControlName="issue" placeholder="e.g. Engine noise, Brake check, Annual service..."
+              rows="3" [class.is-invalid]="bookForm.get('issue')?.invalid && bookForm.get('issue')?.touched">
             </textarea>
-            <small 
-              *ngIf="bookForm.get('issue')?.invalid && bookForm.get('issue')?.touched"
-              class="error-text">
-              Issue must be at least 10 characters long
+            <small *ngIf="bookForm.get('issue')?.invalid && bookForm.get('issue')?.touched" class="error-text">
+              Min 10 characters required.
             </small>
           </div>
 
-          <div class="form-row">
-            <div class="form-field">
-              <label for="priority">Priority Level *</label>
-              <select id="priority" formControlName="priority">
-                <option value="LOW">Low - Can wait</option>
-                <option value="NORMAL">Normal - Within a week</option>
-                <option value="HIGH">High - Urgent (1-2 days)</option>
-              </select>
-            </div>
-
-            <div class="form-field">
-              <label for="estimatedBudget">Estimated Budget (₹)</label>
-              <input 
-                id="estimatedBudget"
-                type="number" 
-                formControlName="estimatedBudget" 
-                placeholder="e.g. 5000"
-                min="0">
-              <small class="hint">Optional - your budget estimate</small>
-            </div>
+          <div class="form-field">
+            <label for="priority">Priority</label>
+            <select id="priority" formControlName="priority">
+              <option value="LOW">Low</option>
+              <option value="NORMAL">Normal</option>
+              <option value="HIGH">High</option>
+            </select>
           </div>
         </div>
 
-        <div class="form-actions">
-          <button type="button" class="btn-secondary" (click)="goBack()">
+        <div class="form-actions-compact">
+          <button type="button" class="btn-cancel" (click)="goBack()">
             Cancel
           </button>
-          <button 
-            type="submit" 
-            class="btn-primary" 
-            [disabled]="isSubmitting || bookForm.invalid">
+          <button type="submit" class="btn-confirm" [disabled]="isSubmitting || bookForm.invalid">
             {{ isSubmitting ? 'Booking...' : 'Confirm Booking' }}
           </button>
         </div>

@@ -30,7 +30,7 @@ export class BookService implements OnInit {
     private readonly vehicleService: VehicleService,
     private readonly dialogService: DialogService,
     private readonly cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (!this.ensureCustomerId()) {
@@ -51,8 +51,7 @@ export class BookService implements OnInit {
   initForm(): void {
     this.bookForm = this.fb.group({
       issue: ['', [Validators.required, Validators.minLength(10)]],
-      priority: ['NORMAL', [Validators.required]],
-      estimatedBudget: ['', [Validators.min(0)]]
+      priority: ['NORMAL', [Validators.required]]
     });
   }
 
@@ -87,7 +86,7 @@ export class BookService implements OnInit {
 
     this.isSubmitting = true;
     this.cdr.markForCheck();
-    
+
     const formValue = this.bookForm.value;
     const serviceRequestDTO = {
       customerId: this.customerId,

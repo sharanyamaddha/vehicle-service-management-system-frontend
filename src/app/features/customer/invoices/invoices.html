@@ -1,81 +1,124 @@
 <div class="content-card">
   <div class="card-header">
-    <h3>My Invoices</h3>
+    <h3>History</h3>
   </div>
 
   <div class="card-body">
     <div *ngIf="isLoading" class="loading-state">
       <div class="spinner"></div>
-      <p>Loading your invoices...</p>
+      <p>Loading your history...</p>
     </div>
 
-    <div *ngIf="!isLoading && invoices.length === 0" class="empty-state">
+
+    <div *ngIf="!isLoading && historyRequests.length === 0" class="empty-state">
       <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        <polyline points="13 2 13 9 20 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <path
+          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
-      <p>No invoices yet.</p>
+      <p>No completed service history available.</p>
     </div>
 
-    <div *ngIf="!isLoading && invoices.length > 0" class="invoices-container">
-      <!-- Summary Cards -->
-      <!-- <div class="summary-cards">
-        <div class="summary-card">
-          <span class="summary-label">Total Invoices</span>
-          <span class="summary-value">{{ invoices.length }}</span>
-        </div>
-        <div class="summary-card">
-          <span class="summary-label">Total Amount</span>
-          <span class="summary-value">₹{{ getTotalAmount() | number:'1.0-2' }}</span>
-        </div>
-        <div class="summary-card alert">
-          <span class="summary-label">Outstanding</span>
-          <span class="summary-value">₹{{ getTotalUnpaid() | number:'1.0-2' }}</span>
-        </div>
-      </div> -->
 
-      <!-- Invoices Table -->
-      <div class="table-wrapper">
-        <table class="invoices-table">
+    <div *ngIf="!isLoading && historyRequests.length > 0" class="requests-grid">
+      <div class="request-card" *ngFor="let request of historyRequests">
+        <div class="request-header">
+          <div class="request-id">
+            <h4>{{ request.requestNumber }}</h4>
+            <p class="request-meta">Request ID: {{ request.id | slice:0:8 }}...</p>
+          </div>
+          <span class="status-badge status-closed">
+            CLOSED
+          </span>
+        </div>
+
+        <div class="request-details two-col-grid">
+          <div class="detail-item">
+            <span class="label">Vehicle</span>
+            <span class="value">{{ getVehicleName(request.vehicleId) }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Service Type</span>
+            <span class="value">{{ request.issue }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Date Completed</span>
+            <span class="value">{{ request.updatedAt | date:'mediumDate' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Technician</span>
+            <span class="value">{{ request.technicianName || 'Assigned Tech' }}</span>
+          </div>
+        </div>
+
+        <div class="request-actions">
+          <button class="btn-primary" (click)="openInvoice(request)">
+            View Invoice
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal-backdrop" *ngIf="showInvoiceModal && selectedInvoice">
+  <div class="modal-content invoice-modal">
+    <div class="modal-header">
+      <h3>Invoice #{{ selectedInvoice.id }}</h3>
+      <button class="close-btn" (click)="closeInvoice()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="invoice-header">
+        <div class="to-details">
+          <label>Billed To:</label>
+          <p>{{ selectedRequest?.customerName || 'Customer' }}</p>
+          <p>{{ selectedVehicleName }}</p>
+        </div>
+        <div class="date-details">
+          <label>Date:</label>
+          <p>{{ selectedInvoice.createdAt | date }}</p>
+          <label>Status:</label>
+          <span class="status-badge" [class.paid]="selectedInvoice.status === 'PAID'">{{ selectedInvoice.status
+            }}</span>
+        </div>
+      </div>
+
+
+      <h4 class="table-title">Parts / Services</h4>
+      <div class="invoice-table-wrapper">
+        <table class="invoice-table">
           <thead>
             <tr>
-              <th>Invoice ID</th>
-              <th>Service Request</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th>Date</th>
-              <th>Action</th>
+              <th>Description</th>
+              <th class="text-right">Qty</th>
+              <th class="text-right">Total</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let invoice of invoices">
-              <td>
-                <span class="invoice-id">{{ invoice.id | slice:0:8 }}...</span>
-              </td>
-              <td>{{ invoice.serviceRequestId | slice:0:8 }}...</td>
-              <td class="amount">₹{{ invoice.total | number:'1.0-2' }}</td>
-              <td>
-                <span *ngIf="isPaid(invoice.status)" class="status-badge paid">
-                  ✓ Paid
-                </span>
-                <span *ngIf="isUnpaid(invoice.status)" class="status-badge unpaid">
-                  Pending
-                </span>
-              </td>
-              <td>{{ invoice.createdAt | date:'MMM dd, yyyy' }}</td>
-              <td>
-                <button 
-                  *ngIf="isUnpaid(invoice.status)"
-                  class="btn-view"
-                  (click)="viewInvoice(invoice.id)">
-                  View Invoice
-                </button>
-                <span *ngIf="isPaid(invoice.status)" class="action-text">Paid</span>
-              </td>
+            <tr *ngFor="let part of selectedRequest?.usedParts">
+              <td>{{ part.partName || 'Part' }}</td>
+              <td class="text-right">{{ part.qty || part.quantity }}</td>
+              <td class="text-right">{{ (part.price | currency : 'INR') || '-' }}</td>
+            </tr>
+            <tr>
+              <td colspan="2" class="fw-bold">Labor Charges</td>
+              <td class="text-right">{{ (selectedInvoice.laborCost || 0) | currency:'INR' }}</td>
             </tr>
           </tbody>
+          <tfoot>
+            <tr class="total-row">
+              <td colspan="2">Grand Total</td>
+              <td class="text-right">{{ selectedInvoice.total | currency:'INR' }}</td>
+            </tr>
+          </tfoot>
         </table>
       </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeInvoice()">Close</button>
+      <button class="btn-primary" *ngIf="selectedInvoice.status !== 'PAID'" (click)="payNow()">Pay Now</button>
+      <button class="btn-success" *ngIf="selectedInvoice.status === 'PAID'" disabled>Paid</button>
     </div>
   </div>
 </div>
