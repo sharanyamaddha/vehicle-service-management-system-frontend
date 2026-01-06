@@ -10,7 +10,7 @@
   },
   "prettier": {
     "printWidth": 100,
-    "singleQuote":    true,
+    "singleQuote": true,
     "overrides": [
       {
         "files": "*.html",
@@ -32,6 +32,7 @@
     "@ng-bootstrap/ng-bootstrap": "^20.0.0",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.8",
+    "chart.js": "^4.5.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

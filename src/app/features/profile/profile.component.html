@@ -1,0 +1,65 @@
+<div class="profile-container">
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+                </svg>
+            </div>
+            <h2 class="mb-2">{{ user?.username }}</h2>
+            <span class="profile-role">{{ user?.role }}</span>
+        </div>
+
+
+        <div class="profile-body">
+            <div *ngIf="message" class="message" [class.success]="messageType === 'success'"
+                [class.error]="messageType === 'error'">
+                {{ message }}
+            </div>
+
+
+            <div class="nav-tabs">
+                <div class="nav-item" [class.active]="activeTab === 'EDIT'" (click)="switchTab('EDIT')">Edit Details
+                </div>
+                <div class="nav-item" [class.active]="activeTab === 'PASSWORD'" (click)="switchTab('PASSWORD')">Change
+                    Password</div>
+            </div>
+
+
+
+            <form *ngIf="activeTab === 'EDIT'" [formGroup]="editForm" (ngSubmit)="onUpdateProfile()">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" formControlName="username" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" formControlName="email" class="form-control">
+                </div>
+                <button type="submit" class="btn-action" [disabled]="isLoading">
+                    {{ isLoading ? 'Updating...' : 'Save Changes' }}
+                </button>
+            </form>
+
+
+            <form *ngIf="activeTab === 'PASSWORD'" [formGroup]="passwordForm" (ngSubmit)="onChangePassword()">
+                <div class="form-group">
+                    <label class="form-label">Current Password</label>
+                    <input type="password" formControlName="oldPassword" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <input type="password" formControlName="newPassword" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirm New Password</label>
+                    <input type="password" formControlName="confirmPassword" class="form-control">
+                </div>
+                <button type="submit" class="btn-action" [disabled]="isLoading">
+                    {{ isLoading ? 'Changing Password...' : 'Update Password' }}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

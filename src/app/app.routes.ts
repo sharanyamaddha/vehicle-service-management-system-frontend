@@ -3,13 +3,12 @@ import { Home } from './features/public/home/home';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
 import { NoAuthGuard } from './core/guards/no-auth.guard';
+import { AuthGuard } from './core/guards/auth.guard';
 
-import { TechnicianDashboard } from './features/technician/technician-dashboard/technician-dashboard';
 import { PublicLayout } from './shared/layouts/public-layout/public-layout';
 import { DashboardLayout } from './shared/layouts/dashboard-layout/dashboard-layout';
 
 export const routes: Routes = [
-  // Public Routes (Wrapped in PublicLayout with Navbar)
   {
     path: '',
     component: PublicLayout,
@@ -22,7 +21,17 @@ export const routes: Routes = [
     ]
   },
 
-  // Admin Dashboard (Route-based)
+  // Authenticated User Dashboard (General)
+  {
+    path: '',
+    component: DashboardLayout,
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'profile', loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent) },
+    ]
+  },
+
+  // Admin Dashboard
   {
     path: 'admin',
     component: DashboardLayout,
@@ -36,21 +45,21 @@ export const routes: Routes = [
     ]
   },
 
-  // Other Dashboards (Placeholder, can be updated to use DashboardLayout later)
   // Customer Dashboard
   {
     path: 'customer',
     component: DashboardLayout,
     children: [
       { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
-      { path: 'dashboard', redirectTo: 'vehicles', pathMatch: 'full' }, // Redirect legacy
+      { path: 'dashboard', redirectTo: 'vehicles', pathMatch: 'full' },
       { path: 'vehicles', loadComponent: () => import('./features/customer/vehicles/vehicles').then(m => m.Vehicles) },
       { path: 'requests', loadComponent: () => import('./features/customer/requests/requests').then(m => m.Requests) },
-      { path: 'requests/:id', loadComponent: () => import('./features/customer/service-detail/service-detail').then(m => m.ServiceDetailComponent) },
+      { path: 'requests/:id', loadComponent: () => import('./features/customer/request-detail/customer-request-detail').then(m => m.CustomerRequestDetailComponent) },
       { path: 'invoices', loadComponent: () => import('./features/customer/invoices/invoices').then(m => m.Invoices) },
       { path: 'book-service/:vehicleId', loadComponent: () => import('./features/customer/book-service/book-service').then(m => m.BookService) }
     ]
   },
+
   // Manager Dashboard
   {
     path: 'manager',
@@ -60,10 +69,20 @@ export const routes: Routes = [
       { path: 'requests', loadComponent: () => import('./features/manager/requests/requests').then(m => m.Requests) },
       { path: 'requests/:id', loadComponent: () => import('./features/manager/request-detail/request-detail').then(m => m.ManagerRequestDetail) },
       { path: 'inventory-usage', loadComponent: () => import('./features/manager/inventory-usage/inventory-usage').then(m => m.InventoryUsage) },
-      { path: 'low-stock-alerts', loadComponent: () => import('./features/manager/low-stock-alerts/low-stock-alerts').then(m => m.LowStockAlerts) },
-      { path: 'low-stock-alerts', loadComponent: () => import('./features/manager/low-stock-alerts/low-stock-alerts').then(m => m.LowStockAlerts) },
+
       { path: 'dashboard', redirectTo: 'requests', pathMatch: 'full' }
     ]
   },
-  { path: 'technician', children: [{ path: 'dashboard', component: TechnicianDashboard }] },
+
+  // Technician Dashboard
+  {
+    path: 'technician',
+    component: DashboardLayout,
+    children: [
+      { path: '', redirectTo: 'jobs', pathMatch: 'full' },
+      { path: 'dashboard', redirectTo: 'jobs', pathMatch: 'full' },
+      { path: 'jobs', loadComponent: () => import('./features/technician/assigned-jobs/assigned-jobs').then(m => m.AssignedJobs) },
+      { path: 'parts', loadComponent: () => import('./features/technician/my-part-requests/my-part-requests').then(m => m.MyPartRequests) }
+    ]
+  },
 ];

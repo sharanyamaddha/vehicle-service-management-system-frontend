@@ -41,6 +41,20 @@ export class HttpBase {
     return this.http.patch<T>(environment.apiUrl + url, body || {}, this.headers());
   }
 
+  patchText(url: string, body?: any): Observable<string> {
+    return this.http.patch(environment.apiUrl + url, body || {}, {
+      ...this.headers(),
+      responseType: 'text' as const
+    });
+  }
+
+  putText(url: string, body?: any): Observable<string> {
+    return this.http.put(environment.apiUrl + url, body || {}, {
+      ...this.headers(),
+      responseType: 'text' as const
+    });
+  }
+
   delete<T>(url: string): Observable<T> {
     return this.http.delete<T>(environment.apiUrl + url, this.headers());
   }
