@@ -1,1 +1,172 @@
-<p>assigned-jobs works!</p>
+<div class="page-container">
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
+        <h3 class="mb-0">Assigned Jobs</h3>
+
+
+        <div class="filter-container">
+            <select class="form-select status-filter-dropdown" [(ngModel)]="selectedStatusFilter">
+                <option *ngFor="let opt of filterOptions" [value]="opt.value">
+                    {{ opt.label }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-muted">Loading your schedule...</p>
+    </div>
+
+    <div *ngIf="!isLoading && filteredJobs.length === 0" class="empty-state">
+        <p>No jobs found.</p>
+    </div>
+
+    <div class="jobs-grid" *ngIf="!isLoading && filteredJobs.length > 0">
+        <div class="job-card" *ngFor="let job of filteredJobs">
+            <div class="card-header">
+                <span class="request-id">#{{ job.requestNumber }}</span>
+                <span [class]="'status-badge ' + getBadgeClass(job.status)">{{ job.status.replace('_', ' ') }}</span>
+            </div>
+
+            <div class="card-body">
+                <div class="info-row">
+                    <label>Vehicle</label>
+                    <span class="value">{{ getVehicleDisplay(job.vehicleId) }}</span>
+                </div>
+
+                <div class="info-row">
+                    <label>Service Type</label>
+                    <span class="value">{{ job.issue }}</span>
+                </div>
+
+                <div class="info-row">
+                    <label>Bay</label>
+                    <span class="value highlight">Bay {{ job.bayNumber }}</span>
+                </div>
+
+                <div class="info-row">
+                    <label>Priority</label>
+                    <span class="value">{{ job.priority }}</span>
+                </div>
+
+
+                <div class="mt-3 p-3 bg-light rounded" *ngIf="job.usedParts && job.usedParts.length > 0">
+                    <h6 class="text-muted small fw-bold mb-2">REQUESTED PARTS</h6>
+                    <div *ngFor="let part of job.usedParts" class="d-flex justify-content-between small mb-1">
+                        <span>{{ part.partName }} (x{{ part.quantity }})</span>
+                        <span class="badge" [class.bg-success]="job.partsStatus === 'PARTS_APPROVED'"
+                            [class.bg-warning]="job.partsStatus === 'PARTS_REQUESTED'"
+                            [class.bg-secondary]="!job.partsStatus">
+                            {{ job.partsStatus?.replace('PARTS_', '')?.replace('_', ' ') || 'PENDING' }}
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-footer" *ngIf="job.status !== 'CLOSED'">
+                <div class="actions">
+
+
+                    <button *ngIf="job.status === 'ASSIGNED' && (!job.partsStatus || job.partsStatus === 'PARTS_NONE')"
+                        class="btn btn-primary btn-sm full-width" (click)="openRequestParts(job)">
+                        <i class="fas fa-tools me-1"></i> Request Parts
+                    </button>
+
+
+                    <button *ngIf="job.status === 'ASSIGNED' && job.partsStatus === 'PARTS_REQUESTED'"
+                        class="btn btn-secondary btn-sm full-width" disabled>
+                        <i class="fas fa-hourglass-half me-1"></i> Waiting for Approval
+                    </button>
+
+
+                    <button *ngIf="job.status === 'ASSIGNED' && job.partsStatus === 'PARTS_APPROVED'"
+                        class="btn btn-success btn-sm full-width" (click)="startWork(job.id)">
+                        <i class="fas fa-play me-1"></i> Start Work
+                    </button>
+
+
+                    <button *ngIf="job.status === 'IN_PROGRESS'" class="btn btn-success btn-sm full-width"
+                        (click)="completeWork(job.id)">
+                        Complete Work
+                    </button>
+
+                    <div *ngIf="job.status === 'COMPLETED'" class="alert alert-info p-2 text-center mt-2 mb-0"
+                        style="font-size: 0.85rem;">
+                        <i class="fas fa-clock me-1"></i> Waiting for Manager Closure
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal-backdrop" *ngIf="showPartsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Request Parts</h3>
+            <button class="close-btn" (click)="closePartsModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p class="text-muted mb-3">Job #{{ selectedJob?.requestNumber }}</p>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Part</th>
+                        <th style="width: 100px;">Qty</th>
+                        <th style="width: 50px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of requestPartsSelection; let i = index">
+                        <td>
+                            <select class="form-select" [(ngModel)]="row.partId">
+                                <option value="" disabled>Select Part...</option>
+                                <option *ngFor="let part of partsList" [value]="part.id" [disabled]="part.stock <= 0">
+                                    {{ part.name }} (Stock: {{ part.stock }})
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" [(ngModel)]="row.quantity" min="1">
+                        </td>
+                        <td class="text-center align-middle">
+                            <button type="button" class="btn btn-sm text-danger border-0 bg-transparent"
+                                (click)="removePartRow(i)" title="Remove item">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button class="btn btn-sm btn-outline-primary" (click)="addPartRow()">
+                <i class="fas fa-plus"></i> Add Another Part
+            </button>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="closePartsModal()">Cancel</button>
+            <button class="btn btn-primary" (click)="submitPartsRequest()">Submit Request</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal-backdrop" *ngIf="dialogVisible" style="z-index: 2000;">
+    <div class="modal-content" style="max-width: 400px; padding: 24px;">
+        <div class="modal-header" style="margin-bottom: 16px;">
+            <h3 style="margin: 0; font-size: 18px;">{{ dialogTitle }}</h3>
+        </div>
+        <div class="modal-body" style="margin-bottom: 24px;">
+            <p [class.text-danger]="dialogType === 'error'" style="margin: 0; color: #374151;">{{ dialogMessage }}</p>
+        </div>
+        <div class="modal-actions" style="margin-top: 0; padding-top: 0; border: none;">
+            <button *ngIf="dialogType === 'confirm'" class="btn btn-secondary" (click)="closeDialog()">Cancel</button>
+            <button *ngIf="dialogType === 'confirm'" class="btn btn-primary"
+                (click)="handleDialogConfirm()">Confirm</button>
+            <button *ngIf="dialogType !== 'confirm'" class="btn btn-primary" (click)="closeDialog()">OK</button>
+        </div>
+    </div>
+</div>

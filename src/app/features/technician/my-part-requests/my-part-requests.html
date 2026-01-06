@@ -1,0 +1,52 @@
+<div class="page-container">
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
+        <h3>Part Request History</h3>
+    </div>
+
+    <div class="history-view">
+        <div *ngIf="isLoading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p>Loading history...</p>
+        </div>
+
+        <div *ngIf="!isLoading && partRequests.length === 0" class="empty-state">
+            <div class="mb-3">
+                <i class="fas fa-history fa-3x text-muted"></i>
+            </div>
+            <h5>No History</h5>
+            <p>You haven't requested any parts yet.</p>
+        </div>
+
+        <div class="table-container card" *ngIf="!isLoading && partRequests.length > 0">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Job ID</th>
+                            <th>Part Name</th>
+                            <th>Quantity</th>
+                            <th>Status</th>
+                            <th>Requested Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let req of partRequests">
+                            <td><span class="fw-bold">#{{ req.requestNumber }}</span></td>
+                            <td>{{ req.partName }}</td>
+                            <td>{{ req.quantity }}</td>
+                            <td>
+                                <span class="status-badge" [class.approved]="req.status === 'PARTS_APPROVED'"
+                                    [class.pending]="req.status === 'PARTS_REQUESTED'"
+                                    [class.rejected]="req.status === 'REJECTED'">
+                                    {{ req.status === 'PARTS_NONE' ? 'N/A' : req.status.replace('PARTS_',
+                                    '').replace('_', ' ') }}
+                                </span>
+                            </td>
+                            <td>{{ req.requestedAt | date:'mediumDate' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,136 @@
+.page-container {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Page Header (Matching Admin Dashboard h3) */
+.page-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0;
+}
+
+/* Original Buttons (kept but unused here if replaced) */
+.btn-tab {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    color: #6c757d;
+    transition: all 0.2s;
+}
+
+.btn-tab.active {
+    color: #0d6efd;
+    border-bottom-color: #0d6efd;
+}
+
+.btn-tab:hover {
+    color: #0d6efd;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+}
+
+.modal-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #dee2e6;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    border-top: none;
+    font-weight: 600;
+    color: #6c757d;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: #f5f5f5;
+    color: #616161;
+}
+
+.status-badge.approved {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #888;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
