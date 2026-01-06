@@ -9,7 +9,7 @@
         </button>
     </div>
 
-    <!-- Add Bay Form -->
+
     <div class="add-user-card" *ngIf="showAddBay">
         <form [formGroup]="addBayForm" (ngSubmit)="submitAddBay()">
             <div class="form-grid" style="grid-template-columns: 1fr;">
@@ -63,6 +63,10 @@
                             <button class="btn-action" [ngClass]="bay.active ? 'btn-deactivate' : 'btn-activate'"
                                 (click)="toggleBayStatus(bay)">
                                 {{ bay.active ? 'Disable' : 'Enable' }}
+                            </button>
+                            <button *ngIf="!bay.available" class="btn-action btn-secondary ms-2"
+                                (click)="forceRelease(bay)">
+                                Release
                             </button>
                         </td>
                     </tr>

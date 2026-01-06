@@ -106,17 +106,38 @@ export class AdminBays implements OnInit {
             bay.active = !bay.active;
             this.cdr.detectChanges();
           },
-          error: () => {
-            this.dialogService.confirm({
-              title: 'Error',
-              message: `Failed to ${action.toLowerCase()} bay.`,
-              confirmLabel: 'OK',
-              cancelLabel: '',
-              isDangerous: true
-            }).subscribe();
-          }
+          error: () => this.showError(`Failed to ${action.toLowerCase()} bay.`)
         });
       }
     });
+  }
+
+  forceRelease(bay: ServiceBay): void {
+    this.dialogService.confirm({
+      title: `Force Release Bay ${bay.bayNumber}`,
+      message: 'This will mark the bay as available explicitly. Use only if it is stuck.',
+      confirmLabel: 'Release',
+      cancelLabel: 'Cancel',
+      isDangerous: true
+    }).subscribe(confirmed => {
+      if (confirmed) {
+        this.bayService.forceRelease(bay.bayNumber).subscribe({
+          next: () => {
+            bay.available = true;
+            this.cdr.detectChanges();
+            this.dialogService.confirm({
+              title: 'Success', message: 'Bay released.', confirmLabel: 'OK', cancelLabel: '', isDangerous: false
+            }).subscribe();
+          },
+          error: (err) => this.showError('Failed to release bay.')
+        });
+      }
+    });
+  }
+
+  private showError(msg: string) {
+    this.dialogService.confirm({
+      title: 'Error', message: msg, confirmLabel: 'OK', cancelLabel: '', isDangerous: true
+    }).subscribe();
   }
 }

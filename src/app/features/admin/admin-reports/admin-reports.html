@@ -1,21 +1,63 @@
 <div class="content-card">
     <div class="card-header">
-        <h3>System Status & Reports</h3>
+        <h3>Reports & Analytics</h3>
+        <button class="btn-refresh" (click)="loadData()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Refresh
+        </button>
     </div>
+
     <div class="card-body">
-        <div class="dashboard-stats">
-            <div class="stat-card">
-                <h3>Total Users</h3>
-                <p class="stat-value text-primary">{{ totalUsers }}</p>
+        <div *ngIf="isLoading" class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading reports...</p>
+        </div>
+
+        <div *ngIf="!isLoading">
+
+            <div class="row chart-row mb-4">
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header">Service Requests by Status</div>
+                        <div class="card-body chart-container">
+                            <canvas #statusChart></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header">Monthly Service Requests</div>
+                        <div class="card-body chart-container">
+                            <canvas #monthlyChart></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="stat-card">
-                <h3>Active Bays</h3>
-                <p class="stat-value text-success">{{ totalBays }}</p>
+
+
+            <div class="row chart-row mb-4">
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header">Top 5 Used Inventory Parts</div>
+                        <div class="card-body chart-container">
+                            <canvas #partsChart></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header">Monthly Revenue (Rs)</div>
+                        <div class="card-body chart-container">
+                            <canvas #revenueChart></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="stat-card">
-                <h3>Low Stock Items</h3>
-                <p class="stat-value text-danger">{{ totalLowStock }}</p>
-            </div>
+
         </div>
     </div>
 </div>

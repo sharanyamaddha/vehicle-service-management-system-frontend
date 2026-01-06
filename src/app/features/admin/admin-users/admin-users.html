@@ -20,54 +20,62 @@
         </div>
     </div>
 
-    <!-- Add User Form -->
-    <div class="add-user-card" *ngIf="showAddUser">
-        <form [formGroup]="addUserForm" (ngSubmit)="submitAddUser()">
-            <div class="form-grid">
-                <div class="form-field">
-                    <label>Username</label>
-                    <input type="text" formControlName="username" placeholder="Enter username" />
+
+    <div class="modal-backdrop" *ngIf="showAddUser">
+        <div class="modal-content">
+            <h3>Add New User</h3>
+            <form [formGroup]="addUserForm" (ngSubmit)="submitAddUser()">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" formControlName="username" class="form-control" placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" formControlName="email" class="form-control" placeholder="user@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" formControlName="password" class="form-control"
+                            placeholder="Min 6 characters">
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select formControlName="role" class="form-select">
+                            <option value="MANAGER">Manager</option>
+                            <option value="TECHNICIAN">Technician</option>
+
+                        </select>
+                    </div>
+
+                    <div class="form-group" *ngIf="addUserForm.get('role')?.value === 'TECHNICIAN'">
+                        <label>Specialization</label>
+                        <select formControlName="specialization" class="form-select">
+                            <option value="">Select specialization</option>
+                            <option *ngFor="let sp of specializations" [value]="sp">{{ sp }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" *ngIf="addUserForm.get('role')?.value === 'TECHNICIAN'">
+                        <label>Availability</label>
+                        <select formControlName="available" class="form-select">
+                            <option [ngValue]="true">Available</option>
+                            <option [ngValue]="false">Busy</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-field">
-                    <label>Email</label>
-                    <input type="email" formControlName="email" placeholder="user@example.com" />
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" (click)="showAddUser = false">Cancel</button>
+                    <button type="submit" class="btn-primary" [disabled]="isSubmitting || addUserForm.invalid">
+                        Save User
+                    </button>
                 </div>
-                <div class="form-field">
-                    <label>Password</label>
-                    <input type="password" formControlName="password" placeholder="Min 6 characters" />
-                </div>
-                <div class="form-field">
-                    <label>Role</label>
-                    <select formControlName="role">
-                        <option value="MANAGER">Manager</option>
-                        <option value="TECHNICIAN">Technician</option>
-                    </select>
-                </div>
-                <div class="form-field" *ngIf="addUserForm.get('role')?.value === 'TECHNICIAN'">
-                    <label>Specialization</label>
-                    <select formControlName="specialization">
-                        <option value="">Select specialization</option>
-                        <option *ngFor="let sp of specializations" [value]="sp">{{ sp }}</option>
-                    </select>
-                </div>
-                <div class="form-field toggle-field" *ngIf="addUserForm.get('role')?.value === 'TECHNICIAN'">
-                    <label>Available</label>
-                    <label class="switch">
-                        <input type="checkbox" formControlName="available" />
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-            <div class="form-actions">
-                <button type="button" class="btn-secondary" (click)="showAddUser = false">Cancel</button>
-                <button type="submit" class="btn-primary" [disabled]="isSubmitting || addUserForm.invalid">
-                    {{ isSubmitting ? 'Saving...' : 'Save User' }}
-                </button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 
-    <!-- Users Table -->
+
     <div class="card-body">
         <div *ngIf="isLoading" class="loading-state">
             <div class="spinner"></div>
@@ -98,7 +106,8 @@
                                 user.active ? 'Active' : 'Inactive' }}</span></td>
                         <td>
                             <button class="btn-action" [ngClass]="user.active ? 'btn-deactivate' : 'btn-activate'"
-                                (click)="openConfirm(user)">
+                                (click)="openConfirm(user)" [disabled]="user.role === 'CUSTOMER'"
+                                [title]="user.role === 'CUSTOMER' ? 'Cannot deactivate customers' : ''">
                                 {{ user.active ? 'Deactivate' : 'Activate' }}
                             </button>
                         </td>

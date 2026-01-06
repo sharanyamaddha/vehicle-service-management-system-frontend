@@ -23,7 +23,7 @@ export class AdminUsers implements OnInit {
   addUserForm!: FormGroup;
   isSubmitting: boolean = false;
 
-  specializations: string[] = ['ENGINE', 'ELECTRICAL', 'BODYWORK'];
+  specializations: string[] = ['ENGINE', 'ELECTRICAL', 'BODYWORK', 'BRAKES', 'AC', 'GENERAL'];
 
   constructor(
     private userService: UserService,
