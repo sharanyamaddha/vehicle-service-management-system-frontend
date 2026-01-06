@@ -1,26 +1,19 @@
 <div class="admin-layout">
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar">
-        <!-- Sidebar Header -->
+
+    <div class="sidebar-backdrop" *ngIf="isSidebarOpen" (click)="closeSidebar()"></div>
+
+    <aside class="sidebar" [class.open]="isSidebarOpen">
         <div class="sidebar-header">
             <div class="sidebar-brand">
-                <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M12 14l9-5-9-5-9 5 9 5z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path
-                        d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path
-                        d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                <span class="brand-text">{{ role === 'ADMIN' ? 'Admin Panel' : 'Customer Portal' }}</span>
+                <img src="/logo.png" alt="AutoServe Logo" class="sidebar-logo" />
+                <span class="brand-text">AutoServe</span>
             </div>
+
         </div>
 
-        <!-- Navigation Menu -->
+
         <nav class="sidebar-nav">
-            <ul class="nav-list">
-                <!-- Admin Menu -->
+            <ul class="nav-list" (click)="closeSidebar()">
                 <ng-container *ngIf="role === 'ADMIN'">
                     <li class="nav-item">
                         <a class="nav-link" routerLink="/admin/users" routerLinkActive="active-link">
@@ -73,7 +66,6 @@
                     </li>
                 </ng-container>
 
-                <!-- Customer Menu -->
                 <ng-container *ngIf="role === 'CUSTOMER'">
                     <li class="nav-item">
                         <a class="nav-link" routerLink="/customer/vehicles" routerLinkActive="active-link">
@@ -107,12 +99,11 @@
                                 <path d="M16 17H8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                 <path d="M10 9H8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <span class="nav-text">My Invoices</span>
+                            <span class="nav-text">History</span>
                         </a>
                     </li>
                 </ng-container>
 
-                <!-- Manager Menu -->
                 <ng-container *ngIf="role === 'MANAGER'">
                     <li class="nav-item">
                         <a class="nav-link" routerLink="/manager/requests" routerLinkActive="active-link">
@@ -131,68 +122,91 @@
                                     d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <span class="nav-text">Inventory Requests</span>
+                            <span class="nav-text">
+                                Inventory Management
+                                <span class="badge bg-danger ms-2 badge-sm" *ngIf="lowStockCount > 0">{{ lowStockCount
+                                    }}</span>
+                            </span>
+                        </a>
+                    </li>
+
+                </ng-container>
+
+                <ng-container *ngIf="role === 'TECHNICIAN'">
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/technician/jobs" routerLinkActive="active-link">
+                            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path
+                                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span class="nav-text">Assigned Jobs</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" routerLink="/manager/low-stock-alerts" routerLinkActive="active-link">
+                        <a class="nav-link" routerLink="/technician/parts" routerLinkActive="active-link">
                             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path
-                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                                <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <span class="nav-text">Low Stock Alerts</span>
+                            <span class="nav-text">My Part Requests</span>
                         </a>
                     </li>
                 </ng-container>
             </ul>
         </nav>
+
+
+        <div class="sidebar-footer" *ngIf="shouldShowBackButton()">
+            <button class="btn-back-dashboard" (click)="goBack()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width:16px;margin-right:8px;">
+                    <path d="M19 12H5m7-7l-7 7 7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Back to Dashboard
+            </button>
+        </div>
     </aside>
 
-    <!-- Main Content Area -->
-    <main class="main-content">
-        <!-- Top Bar -->
-        <header class="top-bar">
-            <div class="page-title">
-                <h1>Dashboard</h1>
-                <p class="page-subtitle">Welcome to Admin Dashboard</p>
+    <header class="top-bar">
+        <button class="btn-hamburger" (click)="toggleSidebar()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+
+        <div class="page-title">
+            <h1>{{ getRoleDisplay() }}</h1>
+
+        </div>
+
+        <div class="top-bar-actions">
+            <div class="user-info-header">
+                <div class="user-name">{{ username }}</div>
+                <div class="user-role-label">{{ role | titlecase }}</div>
             </div>
 
-            <div class="top-bar-actions">
-                <button class="btn-icon" title="Notifications">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <div class="profile-dropdown-container">
+                <div class="profile-icon-wrapper" (click)="showProfileMenu = !showProfileMenu">
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="profile-icon-svg">
                         <path
-                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
                     </svg>
-                </button>
+                </div>
 
-                <!-- Profile Dropdown -->
-                <div class="profile-dropdown-container">
-                    <div class="admin-avatar-small" (click)="showProfileMenu = !showProfileMenu">A</div>
-                    <div class="profile-menu" *ngIf="showProfileMenu">
-                        <div class="profile-header">
-                            <p class="name">{{ username }}</p>
-                            <p class="role">{{ role | titlecase }}</p>
-                        </div>
-                        <button class="btn-logout-dropdown" (click)="logout()">
-                            <svg viewBox="0 0 24 24" fill="none" class="logout-icon" stroke="currentColor">
-                                <path
-                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            Logout
-                        </button>
+                <div class="profile-menu" *ngIf="showProfileMenu">
+                    <div class="profile-header">
+                        <p class="name">{{ username }}</p>
+                        <p class="role">{{ role | titlecase }}</p>
                     </div>
+                    <ul class="profile-links">
+                        <li (click)="router.navigate(['/profile']); showProfileMenu=false">View Profile</li>
+                        <li (click)="logout()">Logout</li>
+                    </ul>
                 </div>
             </div>
-        </header>
-
-        <!-- Content Area -->
-        <div class="content-area">
-            <div class="content-wrapper">
-                <router-outlet></router-outlet>
-            </div>
         </div>
+    </header>
+
     </main>
+
 </div>

@@ -17,8 +17,10 @@
     border-bottom: 1px solid rgba(229, 231, 235, 0.5);
 
     /* Sticky Logic */
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    width: 100%;
     z-index: 1000;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
     /* Richer shadow */
@@ -34,6 +36,9 @@
 
 /* Logo / Brand */
 .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     font-size: 18px;
     font-weight: 700;
     color: #2563eb;
@@ -41,6 +46,12 @@
     text-decoration: none;
     letter-spacing: -0.025em;
     transition: color 0.2s;
+}
+
+.brand-logo {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
 }
 
 .brand:hover {

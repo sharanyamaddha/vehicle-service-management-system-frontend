@@ -12,14 +12,12 @@ export class DialogService {
     const modalRef = this.modalService.open(ConfirmDialog, {
       backdrop: 'static',
       keyboard: false,
-      centered: true
+      centered: true,
+      animation: false
     });
 
-    // Pass data to the component instance
     modalRef.componentInstance.data = data;
 
-    // Convert result promise to observable
-    // When dismissed (Backdrop click), it throws, so we catch and return false
     return from(modalRef.result).pipe(
       map(result => result === true),
       catchError(() => of(false))

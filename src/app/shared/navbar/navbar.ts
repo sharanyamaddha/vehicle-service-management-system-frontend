@@ -19,8 +19,6 @@ export class Navbar {
     }
 
     getUsername(): string {
-        // Assuming backend might send username in future, or we parse from token.
-        // For now, returning a static placeholder or checking local storage if available
         return 'User';
     }
 
