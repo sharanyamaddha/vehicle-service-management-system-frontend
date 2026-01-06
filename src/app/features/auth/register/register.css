@@ -10,8 +10,8 @@
     background-size: cover;
     background-position: center;
     position: relative;
-    padding: 40px 0;
-    /* Add padding for scroll overlap */
+    padding: 100px 0 40px 0;
+    /* Add padding for fixed navbar overlap */
 }
 
 /* Dark Overlay for Readability */

@@ -24,7 +24,6 @@ export class Register implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Redirect if already logged in
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/customer/dashboard']);
     }
@@ -74,18 +73,16 @@ export class Register implements OnInit {
       username: this.registerForm.get('username')?.value,
       email: this.registerForm.get('email')?.value,
       password: this.registerForm.get('password')?.value,
-      role: 'CUSTOMER', // Only customers can self-register
+      role: 'CUSTOMER',
     };
 
     this.authService.register(registerData).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         this.isLoading = false;
-        this.successMessage = 'Account created successfully! Redirecting to login...';
-        this.registerForm.reset();
+        this.successMessage = 'Account created successfully! Redirecting...';
 
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 2000);
+        this.authService.saveSession(response);
+        this.router.navigate(['/customer/dashboard']);
       },
       error: (error) => {
         this.isLoading = false;
@@ -95,19 +92,5 @@ export class Register implements OnInit {
     });
   }
 
-  getPasswordStrength(): string {
-    const password = this.registerForm.get('password')?.value;
-    if (!password || password.length < 6) return 'weak';
 
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasNumber = /\d/.test(password);
-    const hasSpecialChar = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
-
-    const strength = [hasUpperCase, hasLowerCase, hasNumber, hasSpecialChar].filter(Boolean).length;
-
-    if (strength <= 1) return 'weak';
-    if (strength <= 2) return 'fair';
-    return 'strong';
-  }
 }

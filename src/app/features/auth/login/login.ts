@@ -25,45 +25,46 @@ export class Login implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Auto-redirect removed as per user request
     this.initializeForm();
   }
 
   initializeForm(): void {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
-      this.errorMessage = 'Please provide both username and password.';
+      this.errorMessage = 'Please provide a valid email and password.';
       return;
     }
 
     this.isLoading = true;
     this.errorMessage = '';
 
-    const loginData: LoginRequest = this.loginForm.value;
+    const loginData: LoginRequest = {
+      email: this.loginForm.get('email')?.value,
+      password: this.loginForm.get('password')?.value
+    };
 
     this.authService.login(loginData).subscribe({
       next: (response: any) => {
-        // Save token and userId temporarily to sessionStorage (required for HttpBase)
         sessionStorage.setItem('token', response.token);
         sessionStorage.setItem('userId', response.userId);
 
-        // Fetch user profile to get the role
         this.http.get('/api/users/me').subscribe({
           next: (userProfile: any) => {
             this.isLoading = false;
-            // Save session with role from user profile
+            this.isLoading = false;
             this.authService.saveSession(response, userProfile.role);
+            sessionStorage.setItem('username', userProfile.username);
             this.navigateByRole();
           },
           error: (error) => {
             this.isLoading = false;
-            // If we can't fetch profile, still proceed but default to CUSTOMER
+            this.isLoading = false;
             this.authService.saveSession(response, 'CUSTOMER');
             this.navigateByRole();
           },
