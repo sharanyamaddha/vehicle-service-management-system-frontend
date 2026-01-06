@@ -10,6 +10,11 @@ export interface Invoice {
   total: number;
   status: 'PENDING' | 'PAID';
   createdAt: string;
+  laborCost?: number;
+  razorpayOrderId?: string;
+  razorpayPaymentId?: string;
+  razorpaySignature?: string;
+  paidAt?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -29,5 +34,17 @@ export class InvoiceService extends HttpBase {
 
   payInvoice(id: string): Observable<any> {
     return this.patch(`/api/invoices/${id}/pay`, {});
+  }
+
+  getRevenueStats(): Observable<any> {
+    return this.get<any>('/api/invoices/revenue-stats');
+  }
+
+  getAllInvoices(): Observable<Invoice[]> {
+    return this.get<Invoice[]>('/api/invoices');
+  }
+
+  verifyRazorpayPayment(paymentData: any): Observable<any> {
+    return this.postText('/api/payments/razorpay/verify', paymentData);
   }
 }

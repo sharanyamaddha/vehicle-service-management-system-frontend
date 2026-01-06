@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpBase } from '../http-base';
 
 export interface LoginRequest {
-  username: string;
+  email: string;
   password?: string;
 }
 

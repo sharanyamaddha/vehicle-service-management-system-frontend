@@ -7,9 +7,14 @@ export interface InventoryPart {
   id?: string;
   name: string;
   price: number;
-  stockQuantity: number;
+  stock: number;
   reorderLevel: number;
   lowStock?: boolean;
+  category?: string;
+  unitType?: string;
+  supplier?: string;
+  description?: string;
+  stockStatus?: string;
 }
 
 @Injectable({
@@ -21,7 +26,6 @@ export class InventoryService extends HttpBase {
     super(http);
   }
 
-  // Admin: View all parts (for reports/monitoring)
   getAllParts(): Observable<InventoryPart[]> {
     return this.get<InventoryPart[]>('/api/parts');
   }
@@ -32,5 +36,25 @@ export class InventoryService extends HttpBase {
 
   updatePart(id: string, part: any): Observable<any> {
     return this.put(`/api/parts/${id}`, part);
+  }
+
+  requestRestock(payload: any): Observable<any> {
+    return this.postText('/api/parts/restock', payload);
+  }
+
+  getPendingRestocks(): Observable<any[]> {
+    return this.get<any[]>('/api/parts/restock');
+  }
+
+  approveRestock(id: string): Observable<any> {
+    return this.putText(`/api/parts/restock/${id}/approve`, {});
+  }
+
+  approvePartsRequest(requestId: string): Observable<any> {
+    return this.putText(`/api/parts/requests/${requestId}/approve`, {});
+  }
+
+  createPart(part: InventoryPart): Observable<InventoryPart> {
+    return this.post<InventoryPart>('/api/parts', part);
   }
 }

@@ -34,4 +34,8 @@ export class ServiceBayService extends HttpBase {
   updateStatus(bayNumber: number, active: boolean): Observable<any> {
     return this.patch(`/api/bays/${bayNumber}/status`, { isAvailable: active });
   }
+
+  forceRelease(bayNumber: number): Observable<any> {
+    return this.post(`/api/bays/${bayNumber}/release`, {});
+  }
 }

@@ -11,7 +11,8 @@ export interface Vehicle {
     model: string;
     year: number;
     color: string;
-    type: 'CAR' | 'BIKE' | 'TRUCK';
+    type: 'CAR' | 'BIKE' | 'TRUCK' | 'BUS' | 'SCOOTY';
+    description?: string;
 }
 
 @Injectable({
@@ -31,6 +32,10 @@ export class VehicleService extends HttpBase {
         return this.get<Vehicle[]>('/api/vehicles');
     }
 
+    getVehicleById(id: string): Observable<Vehicle> {
+        return this.get<Vehicle>(`/api/vehicles/${id}`);
+    }
+
     addVehicle(vehicle: Vehicle): Observable<any> {
         return this.post('/api/vehicles', vehicle);
     }
@@ -41,5 +46,9 @@ export class VehicleService extends HttpBase {
 
     updateVehicle(id: string, vehicle: Vehicle): Observable<any> {
         return this.put(`/api/vehicles/${id}`, vehicle);
+    }
+
+    checkRegistration(regNo: string): Observable<boolean> {
+        return this.get<boolean>(`/api/vehicles/check-registration/${regNo}`);
     }
 }

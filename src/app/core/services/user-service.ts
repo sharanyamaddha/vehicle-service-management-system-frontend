@@ -65,4 +65,16 @@ export class UserService {
   getTechniciansBySpecialization(spec: string): Observable<any[]> {
     return this.http.get<any[]>(`/api/technicians/specialization/${spec}`);
   }
+
+  getMyProfile(): Observable<UserResponse> {
+    return this.http.get<UserResponse>('/api/users/me');
+  }
+
+  updateProfile(data: any): Observable<any> {
+    return this.http.put('/api/users/me', data);
+  }
+
+  changePassword(data: any): Observable<any> {
+    return this.http.patch('/api/users/me/password', data);
+  }
 }
