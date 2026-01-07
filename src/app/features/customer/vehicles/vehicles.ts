@@ -171,44 +171,44 @@ export class Vehicles implements OnInit {
 
         const backendMsg = (err.error?.message || err.error || err.message || '').toLowerCase();
 
-        const backendMsg = (err.error?.message || err.error || err.message || '').toLowerCase();
-
-        this.vehicleForm.get('registrationNumber')?.setErrors({ duplicate: true });
-        this.cdr.detectChanges();
-        return; // STOP here. Do NOT show dialog.
-      }
+        if (backendMsg.includes('duplicate') || backendMsg.includes('already exists')) {
+          this.vehicleForm.get('registrationNumber')?.setErrors({ duplicate: true });
+          this.cdr.detectChanges();
+          return;
+        }
 
         let errorMessage = err.error?.message || err.error || 'An unexpected error occurred.';
-      if(errorMessage.length > 100) errorMessage = 'Failed to add vehicle. Please check your network connection.';
+        if (errorMessage.length > 100) errorMessage = 'Failed to add vehicle. Please check your network connection.';
 
-    this.showError('Error', errorMessage);
-    this.cdr.detectChanges();
-  }
-});
-  }
-
-deleteVehicle(vehicle: Vehicle): void {
-  if(!vehicle.id) return;
-
-  this.showConfirm(
-    'Delete Vehicle',
-    `Are you sure you want to delete ${vehicle.make} ${vehicle.model}?`,
-    () => {
-      if (vehicle.id) {
-        this.vehicleService.deleteVehicle(vehicle.id).subscribe({
-          next: () => {
-            this.loadVehicles();
-          },
-          error: () => {
-            this.showError('Error', 'Failed to delete vehicle');
-          }
-        });
+        this.showError('Error', errorMessage);
+        this.cdr.detectChanges();
       }
-    }
-  );
-}
+    });
+  }
 
-bookService(vehicle: Vehicle): void {
-  this.router.navigate(['/customer/book-service', vehicle.id]);
-}
+  deleteVehicle(vehicle: Vehicle): void {
+    if (!vehicle.id) return;
+
+    this.showConfirm(
+      'Delete Vehicle',
+      `Are you sure you want to delete ${vehicle.make} ${vehicle.model}?`,
+      () => {
+        if (vehicle.id) {
+          this.vehicleService.deleteVehicle(vehicle.id).subscribe({
+            next: () => {
+              this.loadVehicles();
+            },
+            error: () => {
+              this.showError('Error', 'Failed to delete vehicle');
+            }
+          });
+        }
+      }
+    );
+  }
+
+  bookService(vehicle: Vehicle): void {
+    if (!vehicle.id) return;
+    this.router.navigate(['/customer/book-service', vehicle.id]);
+  }
 }
