@@ -15,6 +15,7 @@ import { VehicleService, Vehicle } from '../../../core/services/vehicle';
     templateUrl: './request-detail.html',
     styleUrl: './request-detail.css'
 })
+// Force re-compilation for TS type update
 export class ManagerRequestDetail implements OnInit {
     request!: ServiceRequest;
     vehicle!: Vehicle;
@@ -348,5 +349,10 @@ export class ManagerRequestDetail implements OnInit {
             'CLOSED': 'badge-green'
         };
         return map[status] || 'badge-grey';
+    }
+
+    canChangeAssignment(): boolean {
+        const s = this.request.status as string;
+        return s !== 'COMPLETED' && s !== 'CLOSED';
     }
 }

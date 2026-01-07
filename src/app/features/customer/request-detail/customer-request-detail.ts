@@ -6,7 +6,9 @@ import { VehicleService, Vehicle } from '../../../core/services/vehicle';
 import { InvoiceService, Invoice } from '../../../core/services/invoice';
 import { PaymentService, RazorpayOrderResponse } from '../../../core/services/payment';
 import { UserService } from '../../../core/services/user-service';
-import { forkJoin } from 'rxjs';
+import { InventoryService } from '../../../core/services/inventory';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Component({
     selector: 'app-customer-request-detail',
@@ -30,6 +32,15 @@ export class CustomerRequestDetailComponent implements OnInit {
 
     statusSteps = ['REQUESTED', 'ASSIGNED', 'IN_PROGRESS', 'COMPLETED', 'CLOSED'];
 
+    // Data for Parts Pricing
+    partPrices: Map<string, number> = new Map();
+
+    // Dialog State
+    dialogVisible = false;
+    dialogTitle = '';
+    dialogMessage = '';
+    dialogType: 'info' | 'confirm' | 'error' = 'info';
+
     constructor(
         private readonly route: ActivatedRoute,
         private readonly router: Router,
@@ -38,6 +49,7 @@ export class CustomerRequestDetailComponent implements OnInit {
         private readonly invoiceService: InvoiceService,
         private readonly paymentService: PaymentService,
         private readonly userService: UserService,
+        private readonly inventoryService: InventoryService, // Injected
         private readonly cdr: ChangeDetectorRef
     ) { }
 
@@ -78,6 +90,18 @@ export class CustomerRequestDetailComponent implements OnInit {
             observables.invoices = this.invoiceService.getCustomerInvoices(req.customerId);
         }
 
+        // Fetch Part Prices if usedParts exist
+        // Note: Customers might not have permission to list ALL parts.
+        // We catch the error so it doesn't break the whole page loading.
+        if (req.usedParts && req.usedParts.length > 0) {
+            observables.parts = this.inventoryService.getAllParts().pipe(
+                catchError(err => {
+                    console.warn('Could not load parts catalog (likely permission issue). Prices might be missing.', err);
+                    return of([]); // Return empty array on error
+                })
+            );
+        }
+
         // Set Tech Name immediately if available
         if (req.technicianName) {
             this.technicianName = req.technicianName;
@@ -99,8 +123,41 @@ export class CustomerRequestDetailComponent implements OnInit {
                 }
 
                 if (res.invoices) {
-                    this.invoice = res.invoices.find((inv: Invoice) => inv.serviceRequestId === req.id) || null;
+                    console.log('Fetching Invoices for Customer:', req.customerId);
+                    console.log('Current Request ID:', req.id);
+                    console.log('All Customer Invoices:', res.invoices);
+
+                    this.invoice = res.invoices.find((inv: Invoice) => {
+                        // Loose comparison just in case type differs (though both should be string)
+                        return inv.serviceRequestId == req.id;
+                    }) || null;
+
+                    console.log('Found Invoice:', this.invoice);
                 }
+
+                if (res.parts) {
+                    // Create a Map of PartID -> Price
+                    (res.parts as any[]).forEach(p => {
+                        if (p.id) this.partPrices.set(p.id, p.price);
+                        // Also map by name if needed as fallback, but ID is safer
+                        // Assuming usedParts has partId. If not, we match by name.
+                    });
+
+                    // Fallback matching if usedParts lacks IDs (based on user previous issues)
+                    if (req.usedParts) {
+                        req.usedParts.forEach(up => {
+                            if (!up.unitPrice && up.partId && this.partPrices.has(up.partId)) {
+                                up.unitPrice = this.partPrices.get(up.partId);
+                            }
+                            // Try matching by Name if ID failed
+                            if (!up.unitPrice && up.partName) {
+                                const p = (res.parts as any[]).find(x => x.name === up.partName);
+                                if (p) up.unitPrice = p.price;
+                            }
+                        });
+                    }
+                }
+
                 this.isLoading = false;
                 this.cdr.detectChanges(); // Force Check
             },
@@ -139,7 +196,7 @@ export class CustomerRequestDetailComponent implements OnInit {
             next: (order) => this.openRazorpay(order),
             error: (err) => {
                 console.error('Failed to create order', err);
-                alert('Unable to start payment. Please try again.');
+                this.showError('Payment Error', 'Unable to start payment. Please try again.');
                 this.isPaying = false;
                 this.cdr.detectChanges();
             }
@@ -183,7 +240,7 @@ export class CustomerRequestDetailComponent implements OnInit {
             })
             .catch(err => {
                 console.error('Failed to load Razorpay', err);
-                alert('Payment gateway not available right now.');
+                this.showError('Payment System', 'Payment gateway not available right now.');
                 this.isPaying = false;
                 this.cdr.detectChanges();
             });
@@ -205,11 +262,11 @@ export class CustomerRequestDetailComponent implements OnInit {
                 }
                 this.isPaying = false;
                 this.cdr.detectChanges();
-                alert('Payment successful!');
+                this.showInfo('Payment Successful!', 'Thank you. Your payment has been verified.');
             },
             error: (err) => {
                 console.error('Verification failed', err);
-                alert('Payment could not be verified. Please contact support.');
+                this.showError('Verification Failed', 'Payment could not be verified. Please contact support.');
                 this.isPaying = false;
                 this.cdr.detectChanges();
             }
@@ -251,5 +308,33 @@ export class CustomerRequestDetailComponent implements OnInit {
             document.body.appendChild(script);
         });
         return this.razorpayLoader;
+    }
+
+    getPartsTotal(): number {
+        if (!this.request || !this.request.usedParts) return 0;
+        return this.request.usedParts.reduce((acc, part) => {
+            const price = part.unitPrice || 0;
+            const qty = part.quantity || 0;
+            return acc + (price * qty);
+        }, 0);
+    }
+
+    // Helper Methods for Dialog
+    showInfo(title: string, message: string): void {
+        this.dialogTitle = title;
+        this.dialogMessage = message;
+        this.dialogType = 'info';
+        this.dialogVisible = true;
+    }
+
+    showError(title: string, message: string): void {
+        this.dialogTitle = title;
+        this.dialogMessage = message;
+        this.dialogType = 'error';
+        this.dialogVisible = true;
+    }
+
+    closeDialog(): void {
+        this.dialogVisible = false;
     }
 }

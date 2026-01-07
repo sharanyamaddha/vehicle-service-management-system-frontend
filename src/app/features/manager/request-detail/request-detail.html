@@ -58,7 +58,7 @@
                                     Close Service
                                 </button>
                                 <button class="btn btn-outline-primary" (click)="isEditing = true"
-                                    [disabled]="request.status === 'CLOSED'">
+                                    *ngIf="canChangeAssignment()">
                                     Change Assignment
                                 </button>
                             </div>
@@ -205,7 +205,7 @@
         <div class="modal-body">
             <p>Please enter the final Labor Cost for this service.</p>
             <div class="form-group">
-                <label>Labor Cost ($)</label>
+                <label>Labor Cost (Rs)</label>
                 <input type="number" class="form-control" [(ngModel)]="laborCostInput" min="0">
             </div>
             <p class="text-muted small mt-2">This will generate the final invoice and close the request.</p>

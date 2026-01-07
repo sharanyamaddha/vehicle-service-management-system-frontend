@@ -268,9 +268,12 @@ export class InventoryUsage implements OnInit {
   }
 
   approveParts(reqId: string): void {
+    const request = this.pendingRequests.find(r => r.id === reqId);
+    let partInfo = request?.usedParts?.map(p => p.partName).join(', ') || 'Parts';
+
     this.requestService.approveParts(reqId, this.userId).subscribe({
       next: () => {
-        this.showInfo("Success", "Parts Approved for Request: " + reqId);
+        this.showInfo("Success", `Approved request for: ${partInfo}`);
         this.loadData();
       },
       error: (err: any) => {

@@ -155,15 +155,17 @@
 
 
 <div class="modal-backdrop" *ngIf="dialogVisible" style="z-index: 2000;">
-    <div class="modal-content" style="max-width: 400px; padding: 24px;">
-        <div class="modal-header" style="margin-bottom: 16px;">
-            <h3 style="margin: 0; font-size: 18px;">{{ dialogTitle }}</h3>
+    <div class="alert-dialog-content">
+        <div class="alert-dialog-header">
+            <h3 [class.text-success]="dialogTitle === 'Success'">{{ dialogTitle }}</h3>
         </div>
-        <div class="modal-body" style="margin-bottom: 24px;">
-            <p [class.text-danger]="dialogType === 'error'" style="margin: 0; color: #374151;">{{ dialogMessage }}</p>
+        <div class="alert-dialog-body">
+            <p>{{ dialogMessage }}</p>
         </div>
-        <div class="modal-actions" style="margin-top: 0; padding-top: 0; border: none;">
-            <button *ngIf="dialogType === 'confirm'" class="btn btn-secondary" (click)="closeDialog()">Cancel</button>
+        <div class="alert-dialog-actions">
+            <button *ngIf="dialogType === 'confirm'" class="btn btn-secondary" (click)="closeDialog()"
+                style="background: #e2e8f0; color: #475569; border:none;">Cancel</button>
+
             <button *ngIf="dialogType === 'confirm'" class="btn btn-primary"
                 (click)="handleDialogConfirm()">Confirm</button>
             <button *ngIf="dialogType !== 'confirm'" class="btn btn-primary" (click)="closeDialog()">OK</button>

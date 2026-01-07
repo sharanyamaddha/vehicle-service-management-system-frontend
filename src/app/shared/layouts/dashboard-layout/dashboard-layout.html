@@ -167,49 +167,52 @@
         </div>
     </aside>
 
-    <header class="top-bar">
-        <button class="btn-hamburger" (click)="toggleSidebar()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-        </button>
+    <div class="main-content">
+        <header class="top-bar">
+            <button class="btn-hamburger" (click)="toggleSidebar()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
 
-        <div class="page-title">
-            <h1>{{ getRoleDisplay() }}</h1>
-
-        </div>
-
-        <div class="top-bar-actions">
-            <div class="user-info-header">
-                <div class="user-name">{{ username }}</div>
-                <div class="user-role-label">{{ role | titlecase }}</div>
+            <div class="page-title">
+                <h1>{{ getRoleDisplay() }}</h1>
             </div>
 
-            <div class="profile-dropdown-container">
-                <div class="profile-icon-wrapper" (click)="showProfileMenu = !showProfileMenu">
-                    <svg viewBox="0 0 24 24" fill="currentColor" class="profile-icon-svg">
-                        <path
-                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
-                    </svg>
+            <div class="top-bar-actions">
+                <div class="user-info-header">
+                    <div class="user-name">{{ username }}</div>
+                    <div class="user-role-label">{{ role | titlecase }}</div>
                 </div>
 
-                <div class="profile-menu" *ngIf="showProfileMenu">
-                    <div class="profile-header">
-                        <p class="name">{{ username }}</p>
-                        <p class="role">{{ role | titlecase }}</p>
+                <div class="profile-dropdown-container">
+                    <div class="profile-icon-wrapper" (click)="showProfileMenu = !showProfileMenu">
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="profile-icon-svg">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+                        </svg>
                     </div>
-                    <ul class="profile-links">
-                        <li (click)="router.navigate(['/profile']); showProfileMenu=false">View Profile</li>
-                        <li (click)="logout()">Logout</li>
-                    </ul>
+
+                    <div class="profile-menu" *ngIf="showProfileMenu">
+                        <div class="profile-header">
+                            <p class="name">{{ username }}</p>
+                            <p class="role">{{ role | titlecase }}</p>
+                        </div>
+                        <ul class="profile-links">
+                            <li (click)="router.navigate(['/profile']); showProfileMenu=false">View Profile</li>
+                            <li (click)="logout()">Logout</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <main class="content-wrapper">
-        <router-outlet></router-outlet>
+        <main class="content-area">
+            <div class="content-wrapper">
+                <router-outlet></router-outlet>
+            </div>
+        </main>
 
-    </main>
+    </div>
 
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InventoryService, InventoryPart } from '../../../core/services/inventory';
 
@@ -14,7 +14,8 @@ export class AdminInventory implements OnInit {
   isLoading: boolean = false;
 
   constructor(
-    private inventoryService: InventoryService
+    private inventoryService: InventoryService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -23,15 +24,18 @@ export class AdminInventory implements OnInit {
 
   loadData(): void {
     this.isLoading = true;
+    this.cdr.detectChanges(); // Ensure loading spinner shows
 
     this.inventoryService.getAllParts().subscribe({
       next: (data: InventoryPart[]) => {
         this.allItems = data;
         this.isLoading = false;
+        this.cdr.detectChanges(); // Force update
       },
       error: (err) => {
         console.error(err);
         this.isLoading = false;
+        this.cdr.detectChanges(); // Force update
       }
     });
   }

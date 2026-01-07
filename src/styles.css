@@ -12,3 +12,101 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+/* Alert Dialog Specialized Styles */
+.alert-dialog-content {
+  max-width: 400px;
+  padding: 24px;
+  border-radius: 12px;
+  /* Left aligned text as requested */
+  text-align: left;
+  border: none;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  animation: popIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: white;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Hide Icon Wrapper entirely */
+.alert-icon-wrapper {
+  display: none;
+}
+
+.alert-dialog-header {
+  margin-bottom: 12px;
+  border: none;
+  padding: 0;
+  justify-content: flex-start;
+  /* Aligned left */
+}
+
+.alert-dialog-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Specific class for Green Success Text */
+.text-success {
+  color: #16a34a !important;
+}
+
+.alert-dialog-body {
+  margin-bottom: 24px;
+  color: #4b5563;
+  font-size: 0.95rem;
+  padding: 0;
+  line-height: 1.5;
+}
+
+.alert-dialog-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  /* Center the buttons */
+  width: 100%;
+}
+
+.alert-dialog-actions .btn {
+  flex: 0 1 120px;
+  /* Limited width buttons */
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  color: #475569;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #cbd5e1;
+}

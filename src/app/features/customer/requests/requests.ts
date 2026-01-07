@@ -84,12 +84,23 @@ export class Requests implements OnInit {
   }
 
   applyFilter(): void {
-
     this.filteredRequests = this.allRequests.filter(req => {
       const inv = this.invoicesMap.get(req.id);
-      const isPaid = inv?.status === 'PAID';
-      const isClosed = req.status === 'CLOSED';
 
+      if (this.selectedFilter === 'ALL_ACTIVE') {
+        // Show everything that is NOT Closed (or closed but unpaid might be considered 'actionable'?)
+        // Usually Active means work in progress.
+        return req.status !== 'CLOSED';
+      }
+
+      if (this.selectedFilter === 'CLOSED_UNPAID') {
+        // Must be CLOSED and invoice is NOT PAID (or invoice exists and is PENDING)
+        // If invoice is missing, we assume unpaid/pending generation? 
+        // Using strict check:
+        return req.status === 'CLOSED' && inv?.status !== 'PAID';
+      }
+
+      // Exact match for REQUESTED, ASSIGNED, IN_PROGRESS, COMPLETED
       return req.status === this.selectedFilter;
     });
   }

@@ -100,7 +100,7 @@ export class AdminReports implements OnInit, AfterViewInit, OnDestroy {
           labels: ['Requested', 'Assigned', 'In Progress', 'Completed', 'Closed'],
           datasets: [{
             data: statuses.map(s => counts[s]),
-            backgroundColor: ['#64748b', '#f59e0b', '#3b82f6', '#10b981', '#1e293b'],
+            backgroundColor: ['#64748b', '#f59e0b', '#3b82f6', '#10b981', '#5b7bb3ff'],
             borderWidth: 1
           }]
         },

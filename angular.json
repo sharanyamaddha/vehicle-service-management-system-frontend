@@ -49,12 +49,18 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "docker": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.docker.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
         },
-
-        
         "serve": {
           "builder": "@angular/build:dev-server",
           "configurations": {
@@ -63,6 +69,9 @@
             },
             "development": {
               "buildTarget": "frontend:build:development"
+            },
+            "docker": {
+              "buildTarget": "frontend:build:docker"
             }
           },
           "defaultConfiguration": "development"

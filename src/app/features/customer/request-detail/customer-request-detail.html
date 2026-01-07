@@ -128,13 +128,16 @@
                         <tr *ngFor="let part of request?.usedParts">
                             <td>{{ part.partName || 'Part' }}</td>
                             <td class="text-right">{{ part.quantity }}</td>
-                            <td class="text-right">-</td>
-                            <td class="text-right">-</td>
+                            <td class="text-right">{{ part.unitPrice ? (part.unitPrice | currency:'INR') : '-' }}</td>
+                            <td class="text-right">{{ (part.unitPrice * part.quantity) ? ((part.unitPrice *
+                                part.quantity) | currency:'INR') : '-' }}</td>
                         </tr>
                         <tr>
                             <td colspan="3">Labor & Service Charges</td>
-                            <td class="text-right">{{ invoice.total | currency:'INR' }}</td>
+                            <td class="text-right">{{ (invoice.total - getPartsTotal()) | currency:'INR'
+                                }}</td>
                         </tr>
+                        <!-- Fallback total display if calc fails, just show total -->
                     </tbody>
                     <tfoot>
                         <tr class="total-row">
@@ -151,6 +154,26 @@
                 {{ isPaying ? 'Processing...' : 'Pay Now' }}
             </button>
             <button class="btn-success" *ngIf="invoice.status === 'PAID'" disabled>Paid</button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Success/Error Dialog -->
+<div class="modal-backdrop" *ngIf="dialogVisible" style="z-index: 2000;">
+    <div class="alert-dialog-content">
+        <div class="alert-dialog-header">
+            <h3 [class.text-success]="dialogTitle.includes('Success') || dialogTitle === 'Success'">{{ dialogTitle }}
+            </h3>
+        </div>
+        <div class="alert-dialog-body">
+            <p>{{ dialogMessage }}</p>
+        </div>
+        <div class="alert-dialog-actions">
+            <button *ngIf="dialogType === 'confirm'" class="btn btn-secondary" (click)="closeDialog()"
+                style="background: #e2e8f0; color: #475569; border:none;">Cancel</button>
+
+            <!-- Only confirm button for confirm type, otherwise OK -->
+            <button *ngIf="dialogType !== 'confirm'" class="btn btn-primary" (click)="closeDialog()">OK</button>
         </div>
     </div>
 </div>
